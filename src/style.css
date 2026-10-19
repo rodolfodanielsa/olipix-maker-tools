@@ -93,6 +93,8 @@ code { font-family: inherit; background: color-mix(in srgb, var(--ink) 8%, trans
 .top nav a { color: var(--ink); text-decoration: none; }
 .top nav a:hover { color: var(--peach-deep); }
 .theme { padding: 6px 12px; font-size: 0.9rem; }
+.top nav a.theme { padding: 6px 12px; font-size: 0.9rem; }
+.top nav a.theme:hover { color: var(--ink); }
 
 /* buttons */
 button, .btn {

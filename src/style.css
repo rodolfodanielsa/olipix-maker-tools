@@ -171,6 +171,9 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .drawer:nth-child(2) { padding: 14px 20px; }
 .drawer h3 { color: var(--ink); font-size: 1.05rem; margin-bottom: 4px; }
 .drawer p { margin: 0; font-size: 0.95rem; }
+.drawer.ready { display: block; border-style: solid; background: var(--surface); text-decoration: none; color: var(--ink); }
+.drawer.ready:hover { border-color: var(--ink); }
+.drawer.ready p { color: var(--muted); }
 .soon { font-weight: 600; color: var(--peach-deep); }
 
 .proofs { display: grid; gap: 28px; }
@@ -200,7 +203,7 @@ main.tool { max-width: 780px; margin: 0 auto; padding: 32px 20px 64px; }
 main.tool h1 { font-size: clamp(1.9rem, 4vw, 2.5rem); margin-bottom: 8px; }
 .lead { color: var(--muted); }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 16px 0; }
-.panel[hidden] { display: none; }
+.panel[hidden], label[hidden], aside[hidden], div[hidden] { display: none; }
 .step { font-weight: 600; margin-bottom: 8px; font-family: var(--display); font-size: 1.1rem; }
 .drop { border: 2px dashed var(--line); border-radius: 12px; padding: 28px 16px; text-align: center; cursor: pointer; color: var(--muted); }
 .drop.over, .drop:focus-visible { border-color: var(--peach-deep); color: var(--ink); outline: none; }
@@ -230,6 +233,38 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .change input { width: auto; margin: 5px 0 0; }
 .change .why { grid-column: 2; color: var(--muted); font-size: 0.95rem; }
 .arrow { color: var(--muted); padding: 0 4px; }
+
+/* price calculator */
+main.tool.wide { max-width: 1080px; }
+.hint { color: var(--muted); font-size: 0.9rem; margin: 12px 0 0; }
+input[type='radio'] { width: auto; margin: 0 6px 0 0; accent-color: var(--peach-deep); }
+.mode { display: flex; gap: 10px 24px; flex-wrap: wrap; margin: 16px 0 4px; }
+.mode label { display: flex; align-items: baseline; flex-wrap: wrap; color: var(--ink); font-size: 1rem; }
+.mode label span { color: var(--muted); font-size: 0.9rem; margin-left: 8px; }
+.mode.small { margin: 0 0 10px; }
+.calc { display: grid; gap: 0 24px; align-items: start; }
+.calc-result { position: static; }
+.price-box { background: var(--mat); color: var(--mat-ink); border-radius: 12px; padding: 20px; margin: 16px 0; }
+.price-label { margin: 0; font-size: 0.95rem; opacity: 0.85; }
+.price { margin: 4px 0; font-family: var(--display); font-size: clamp(2.4rem, 8vw, 3.4rem); line-height: 1.1; font-variant-numeric: proportional-nums; color: var(--peach); }
+.price-sub { margin: 0; opacity: 0.85; }
+.lines { grid-template-columns: 1fr auto; margin-top: 14px; padding-top: 12px; border-top: 1px solid color-mix(in srgb, var(--mat-ink) 25%, transparent); }
+.lines dt { color: inherit; opacity: 0.85; }
+.lines dd { text-align: right; font-variant-numeric: tabular-nums; }
+.lines .strong { opacity: 1; font-weight: 600; }
+.share { margin: 16px 0; }
+.share textarea { min-height: 0; }
+@media (max-width: 899px) {
+  .calc-result { display: contents; }
+  .price-box { position: sticky; bottom: 8px; z-index: 5; margin: 8px 0; padding: 12px 16px; box-shadow: 0 6px 24px rgb(0 0 0 / 0.25); }
+  .price { font-size: 2rem; }
+  .lines { display: none; }
+}
+@media (min-width: 900px) {
+  .calc { grid-template-columns: minmax(0, 1fr) 340px; }
+  .calc-result { position: sticky; top: 16px; }
+  .price-box { margin-top: 16px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

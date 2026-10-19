@@ -8,6 +8,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         tune: resolve(__dirname, 'tune/index.html'),
+        price: resolve(__dirname, 'price/index.html'),
       },
     },
   },

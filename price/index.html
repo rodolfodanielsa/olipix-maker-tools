@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de preço — Olipix Maker Tools</title>
+  <meta name="description" content="Quanto cobrar por uma peça impressa em 3D: filamento, energia, máquina, falhas, margem e IVA. Preço ao vivo, no teu browser.">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../src/style.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="Principal">
+      <a href="../#ferramentas">Ferramentas</a>
+      <a href="../#sobre">Sobre</a>
+      <a href="https://olipix-lab.vercel.app">O nosso site</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Código</a>
+      <button class="theme" id="theme" type="button" aria-label="Mudar entre tema claro e escuro">Tema</button>
+    </nav>
+  </div>
+</header>
+
+<main class="tool wide" id="conteudo">
+  <h1>Calculadora de preço</h1>
+  <p class="lead">Quanto cobrar por uma peça impressa em 3D. O peso e o tempo estão no fatiador; o resto são os teus custos. O preço aparece enquanto preenches e os valores ficam só neste browser.</p>
+  <p><a href="?demo=1">Ver um exemplo preenchido</a></p>
+
+  <div class="mode" role="radiogroup" aria-label="Modo">
+    <label><input type="radio" name="mode" value="basic" checked> Básico <span>Material, energia e margem</span></label>
+    <label><input type="radio" name="mode" value="pro"> Profissional <span>Máquina, falhas, IVA, várias peças</span></label>
+  </div>
+
+  <div class="calc">
+    <form class="calc-form" id="form" autocomplete="off" onsubmit="return false">
+      <section class="panel">
+        <div class="step">A peça</div>
+        <div class="grid">
+          <label data-pro>Nome (opcional) <input id="name" maxlength="80" placeholder="ex.: Vaso pequeno"></label>
+          <label>Peso do filamento (g) <input id="grams" type="number" inputmode="decimal" min="0" step="any"></label>
+          <label>Tempo de impressão (horas) <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
+          <label>Tempo de impressão (minutos) <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          <label data-pro>Peças iguais na mesa <input id="pieces" type="number" inputmode="numeric" min="1" step="1" value="1"></label>
+        </div>
+        <p class="hint">Peso e tempo da mesa inteira, como o fatiador os mostra. Com várias peças, o preço é dividido por elas.</p>
+      </section>
+
+      <section class="panel">
+        <div class="step">Os teus custos</div>
+        <div class="grid">
+          <label>Preço do filamento (€/kg) <input id="filamentPerKg" type="number" inputmode="decimal" min="0" step="any" value="20"></label>
+          <label>Consumo da impressora (W) <input id="powerW" type="number" inputmode="decimal" min="0" step="any" value="120"></label>
+          <label>Preço da energia (€/kWh) <input id="kwh" type="number" inputmode="decimal" min="0" step="any" value="0.2"></label>
+          <label data-pro>Desgaste da máquina (€/hora) <input id="machinePerHour" type="number" inputmode="decimal" min="0" step="any" value="1"></label>
+          <label data-pro>Preparação da mesa (€) <input id="setup" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
+          <label data-pro>Margem para falhas (%) <input id="failurePercent" type="number" inputmode="decimal" min="0" step="any" value="5"></label>
+        </div>
+        <p class="hint">Os valores iniciais são só um ponto de partida: troca-os pelos teus. O consumo vê-se na ficha da impressora ou com uma tomada medidora; a energia está na fatura da luz.</p>
+      </section>
+
+      <section class="panel">
+        <div class="step">O teu lucro</div>
+        <div class="grid">
+          <label>Calcular o lucro como
+            <select id="profitMode"><option value="margin">Margem em % sobre o custo</option><option value="fixed">Valor fixo (€)</option></select>
+          </label>
+          <label id="marginBox">Margem (%) <input id="marginPercent" type="number" inputmode="decimal" min="0" step="any" value="30"></label>
+          <label id="fixedBox" hidden>Lucro (€, mesa inteira) <input id="fixedProfit" type="number" inputmode="decimal" min="0" step="any"></label>
+          <label data-pro>IVA (%) <input id="vatPercent" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
+          <label data-pro>Arredondar cada peça para cima
+            <select id="rounding"><option value="none">Não arredondar</option><option value="euro">Ao euro</option><option value="ninety">Para terminar em ,90</option></select>
+          </label>
+        </div>
+      </section>
+    </form>
+
+    <aside class="calc-result" aria-label="Preço sugerido">
+      <div class="price-box">
+        <p class="price-label">Preço sugerido <span id="per-piece" hidden>por peça</span></p>
+        <p class="price" id="price" aria-live="polite">—</p>
+        <p class="price-sub" id="price-sub">Preenche o peso ou o tempo e o preço aparece aqui.</p>
+        <dl class="lines" id="lines"></dl>
+      </div>
+      <div class="share" id="share" hidden>
+        <div class="mode small" role="radiogroup" aria-label="Para quem é o texto">
+          <label><input type="radio" name="audience" value="me" checked> Para mim</label>
+          <label><input type="radio" name="audience" value="client"> Para o cliente</label>
+        </div>
+        <textarea id="share-text" readonly rows="7" aria-label="Texto do orçamento"></textarea>
+        <div class="row"><button class="primary" id="copy" type="button">Copiar</button><button id="reset" type="button">Novo orçamento</button><span id="copy-msg" role="status"></span></div>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>Licença MIT, só para o código.</span>
+    <span>Sem cookies nem analytics.</span>
+    <a href="https://olipix-lab.vercel.app">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Código</a>
+  </div>
+</footer>
+<script type="module" src="../src/price/main.ts"></script>
+</body>
+</html>

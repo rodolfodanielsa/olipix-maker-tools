@@ -20,3 +20,7 @@ Deploy: o workflow `.github/workflows/pages.yml` publica `dist/` no GitHub Pages
 ## Privacidade
 
 Nada é enviado por esta página. O único texto que sai é o prompt que copias, e podes lê-lo antes. Não há analytics.
+
+## Licença
+
+MIT (ver `LICENSE`). Cobre só o código: o nome e o logo Olipix não estão incluídos.

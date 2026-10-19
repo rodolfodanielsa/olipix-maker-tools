@@ -1,9 +1,10 @@
+import { locale, t } from '../i18n';
 import { initTheme } from '../theme';
 import { calculate, type PriceInput, type PriceResult, type Rounding } from './calc';
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 const input = (id: string) => $<HTMLInputElement>(id);
-const eur = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' });
+const eur = new Intl.NumberFormat(locale(), { style: 'currency', currency: 'EUR' });
 
 const SAVED = ['filamentPerKg', 'powerW', 'kwh', 'machinePerHour', 'failurePercent', 'marginPercent', 'vatPercent'] as const;
 const STORE = 'price.settings';
@@ -46,28 +47,28 @@ function line(label: string, value: string, strong = false): [HTMLElement, HTMLE
 }
 
 function breakdown(r: PriceResult): [string, string, boolean][] {
-  const rows: [string, string, boolean][] = [['Material', eur.format(r.costs.material), false], ['Energia', eur.format(r.costs.energy), false]];
-  if (r.costs.machine > 0) rows.push(['Máquina', eur.format(r.costs.machine), false]);
-  if (r.costs.failures > 0) rows.push(['Falhas', eur.format(r.costs.failures), false]);
-  if (r.costs.setup > 0) rows.push(['Preparação', eur.format(r.costs.setup), false]);
-  rows.push(['Custo total', eur.format(r.costs.total), true], ['Lucro', eur.format(r.profit), false]);
-  if (r.vatPercent > 0) rows.push([`IVA ${r.vatPercent.toLocaleString('pt-PT')}%`, eur.format(r.vat * r.pieces), false]);
-  if (r.rounding !== 0) rows.push(['Arredondamento', eur.format(r.rounding * r.pieces), false]);
+  const rows: [string, string, boolean][] = [[t('price.material'), eur.format(r.costs.material), false], [t('price.energy'), eur.format(r.costs.energy), false]];
+  if (r.costs.machine > 0) rows.push([t('price.machine'), eur.format(r.costs.machine), false]);
+  if (r.costs.failures > 0) rows.push([t('price.failures'), eur.format(r.costs.failures), false]);
+  if (r.costs.setup > 0) rows.push([t('price.setup'), eur.format(r.costs.setup), false]);
+  rows.push([t('price.total'), eur.format(r.costs.total), true], [t('price.profit'), eur.format(r.profit), false]);
+  if (r.vatPercent > 0) rows.push([t('price.vat', { pct: r.vatPercent.toLocaleString(locale()) }), eur.format(r.vat * r.pieces), false]);
+  if (r.rounding !== 0) rows.push([t('price.rounding'), eur.format(r.rounding * r.pieces), false]);
   return rows;
 }
 
 function shareText(r: PriceResult, name: string, audience: string): string {
-  const title = name.trim() || 'Peça impressa em 3D';
-  const vat = r.vatPercent > 0 ? ' (IVA incluído)' : '';
+  const title = name.trim() || t('price.defaultTitle');
+  const vat = r.vatPercent > 0 ? t('price.vatNote') : '';
   if (audience === 'client') {
-    const out = [title, r.pieces > 1 ? `${eur.format(r.withVat)} por peça${vat}` : `${eur.format(r.withVat)}${vat}`];
-    if (r.pieces > 1) out.push(`${r.pieces} peças: ${eur.format(r.totalWithVat)}${vat}`);
+    const out = [title, r.pieces > 1 ? t('price.perPieceLine', { price: eur.format(r.withVat), vat }) : `${eur.format(r.withVat)}${vat}`];
+    if (r.pieces > 1) out.push(t('price.nPieces', { n: r.pieces, total: eur.format(r.totalWithVat), vat }));
     return out.join('\n');
   }
-  const out = [r.pieces > 1 ? `${title} (${r.pieces} peças na mesa)` : title, ...breakdown(r).map(([k, v]) => `${k}: ${v}`)];
-  out.push(`Margem obtida: ${r.marginPercent.toLocaleString('pt-PT')}% sobre o custo`);
-  out.push(r.pieces > 1 ? `Preço por peça: ${eur.format(r.withVat)}` : `Preço: ${eur.format(r.withVat)}`);
-  if (r.pieces > 1) out.push(`Total: ${eur.format(r.totalWithVat)}`);
+  const out = [r.pieces > 1 ? t('price.titlePieces', { title, n: r.pieces }) : title, ...breakdown(r).map(([k, v]) => `${k}: ${v}`)];
+  out.push(t('price.marginObtained', { pct: r.marginPercent.toLocaleString(locale()) }));
+  out.push(r.pieces > 1 ? t('price.perPieceFull', { price: eur.format(r.withVat) }) : t('price.priceLine', { price: eur.format(r.withVat) }));
+  if (r.pieces > 1) out.push(t('price.totalLine', { total: eur.format(r.totalWithVat) }));
   return out.join('\n');
 }
 
@@ -79,12 +80,12 @@ function render(): void {
   $('per-piece').hidden = r === null || r.pieces === 1;
   if (r === null) {
     $('price').textContent = '—';
-    $('price-sub').textContent = 'Preenche o peso ou o tempo e o preço aparece aqui.';
+    $('price-sub').textContent = t('price.empty');
     return;
   }
   $('price').textContent = eur.format(r.withVat);
-  const vat = r.vatPercent > 0 ? 'IVA incluído' : 'sem IVA';
-  $('price-sub').textContent = r.pieces > 1 ? `${r.pieces} peças: ${eur.format(r.totalWithVat)} · ${vat}` : vat;
+  const vat = r.vatPercent > 0 ? t('price.inclVat') : t('price.exclVat');
+  $('price-sub').textContent = r.pieces > 1 ? t('price.summary', { n: r.pieces, total: eur.format(r.totalWithVat), vat }) : vat;
   for (const [k, v, strong] of breakdown(r)) lines.append(...line(k, v, strong));
   $<HTMLTextAreaElement>('share-text').value = shareText(r, input('name').value, radio('audience'));
 }
@@ -131,16 +132,16 @@ async function copy(): Promise<void> {
   const msg = $('copy-msg');
   try {
     await navigator.clipboard.writeText(text.value);
-    msg.textContent = 'Copiado.';
+    msg.textContent = t('price.copied');
   } catch {
     text.select();
-    msg.textContent = 'Seleciona o texto e copia à mão.';
+    msg.textContent = t('price.copyManual');
   }
 }
 
 restore();
 if (new URLSearchParams(location.search).has('demo')) {
-  input('name').value = 'Vaso pequeno';
+  input('name').value = t('price.demoName');
   input('grams').value = '38';
   input('hours').value = '2';
   input('minutes').value = '15';

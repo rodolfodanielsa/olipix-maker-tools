@@ -1,3 +1,5 @@
+import { locale, t } from './i18n';
+
 /**
  * Usage counters are off: there is no backend yet. Set COUNTER_URL to enable them, and
  * update the "sem analytics" copy in index.html and README.md at the same time.
@@ -15,7 +17,7 @@ export async function showUses(): Promise<void> {
       const res = await fetch(`${COUNTER_URL}/${el.dataset.uses}`);
       const { count } = (await res.json()) as { count: number };
       if (Number.isFinite(count) && count >= MIN_SHOWN) {
-        el.textContent = `${count.toLocaleString('pt-PT')} pessoas já usaram`;
+        el.textContent = t('counter.uses', { n: count.toLocaleString(locale()) });
         el.hidden = false;
       }
     } catch {

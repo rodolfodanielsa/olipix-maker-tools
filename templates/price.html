@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="{{lang}}" data-root="{{root}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{price.title}}</title>
+  <meta name="description" content="{{price.description}}">
+  <link rel="icon" href="{{root}}logo.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="pt" href="{{site}}{{pathPt}}">
+  <link rel="alternate" hreflang="en" href="{{site}}{{pathEn}}">
+  <link rel="alternate" hreflang="x-default" href="{{site}}{{pathPt}}">
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="{{root}}src/style.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="{{home}}"><img src="{{root}}logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="{{common.nav}}">
+      <a href="{{home}}#ferramentas">{{common.tools}}</a>
+      <a href="{{home}}#sobre">{{common.about}}</a>
+      <a href="{{common.siteHref}}">{{common.site}}</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">{{common.code}}</a>
+      <a class="lang" href="{{alt}}" hreflang="{{other}}" lang="{{other}}">{{common.switch}}</a>
+      <button class="theme" id="theme" type="button" aria-label="{{common.themeAria}}">{{common.theme}}</button>
+    </nav>
+  </div>
+</header>
+
+<main class="tool wide" id="conteudo">
+  <h1>{{price.h1}}</h1>
+  <p class="lead">{{price.lead}}</p>
+  <p><a href="?demo=1">{{price.demo}}</a></p>
+
+  <div class="mode" role="radiogroup" aria-label="{{price.modeAria}}">
+    <label><input type="radio" name="mode" value="basic" checked> {{price.basic}} <span>{{price.basicHint}}</span></label>
+    <label><input type="radio" name="mode" value="pro"> {{price.pro}} <span>{{price.proHint}}</span></label>
+  </div>
+
+  <div class="calc">
+    <form class="calc-form" id="form" autocomplete="off" onsubmit="return false">
+      <section class="panel">
+        <div class="step">{{price.pieceH}}</div>
+        <div class="grid">
+          <label data-pro>{{price.name}} <input id="name" maxlength="80" placeholder="{{price.namePh}}"></label>
+          <label>{{price.grams}} <input id="grams" type="number" inputmode="decimal" min="0" step="any"></label>
+          <label>{{price.hours}} <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
+          <label>{{price.minutes}} <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          <label data-pro>{{price.pieces}} <input id="pieces" type="number" inputmode="numeric" min="1" step="1" value="1"></label>
+        </div>
+        <p class="hint">{{price.pieceHint}}</p>
+      </section>
+
+      <section class="panel">
+        <div class="step">{{price.costsH}}</div>
+        <div class="grid">
+          <label>{{price.perKg}} <input id="filamentPerKg" type="number" inputmode="decimal" min="0" step="any" value="20"></label>
+          <label>{{price.power}} <input id="powerW" type="number" inputmode="decimal" min="0" step="any" value="120"></label>
+          <label>{{price.kwh}} <input id="kwh" type="number" inputmode="decimal" min="0" step="any" value="0.2"></label>
+          <label data-pro>{{price.machine}} <input id="machinePerHour" type="number" inputmode="decimal" min="0" step="any" value="1"></label>
+          <label data-pro>{{price.setup}} <input id="setup" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
+          <label data-pro>{{price.failures}} <input id="failurePercent" type="number" inputmode="decimal" min="0" step="any" value="5"></label>
+        </div>
+        <p class="hint">{{price.costsHint}}</p>
+      </section>
+
+      <section class="panel">
+        <div class="step">{{price.profitH}}</div>
+        <div class="grid">
+          <label>{{price.profitAs}}
+            <select id="profitMode"><option value="margin">{{price.profitMargin}}</option><option value="fixed">{{price.profitFixed}}</option></select>
+          </label>
+          <label id="marginBox">{{price.margin}} <input id="marginPercent" type="number" inputmode="decimal" min="0" step="any" value="30"></label>
+          <label id="fixedBox" hidden>{{price.fixed}} <input id="fixedProfit" type="number" inputmode="decimal" min="0" step="any"></label>
+          <label data-pro>{{price.vat}} <input id="vatPercent" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
+          <label data-pro>{{price.rounding}}
+            <select id="rounding"><option value="none">{{price.roundNone}}</option><option value="euro">{{price.roundEuro}}</option><option value="ninety">{{price.roundNinety}}</option></select>
+          </label>
+        </div>
+      </section>
+    </form>
+
+    <aside class="calc-result" aria-label="{{price.resultAria}}">
+      <div class="price-box">
+        <p class="price-label">{{price.suggested}} <span id="per-piece" hidden>{{price.perPiece}}</span></p>
+        <p class="price" id="price" aria-live="polite">—</p>
+        <p class="price-sub" id="price-sub">{{price.empty}}</p>
+        <dl class="lines" id="lines"></dl>
+      </div>
+      <div class="share" id="share" hidden>
+        <div class="mode small" role="radiogroup" aria-label="{{price.audienceAria}}">
+          <label><input type="radio" name="audience" value="me" checked> {{price.forMe}}</label>
+          <label><input type="radio" name="audience" value="client"> {{price.forClient}}</label>
+        </div>
+        <textarea id="share-text" readonly rows="7" aria-label="{{price.textAria}}"></textarea>
+        <div class="row"><button class="primary" id="copy" type="button">{{price.copy}}</button><button id="reset" type="button">{{price.reset}}</button><span id="copy-msg" role="status"></span></div>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>{{common.licence}}</span>
+    <span>{{common.privacy}}</span>
+    <a href="{{common.siteHref}}">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">{{common.code}}</a>
+  </div>
+</footer>
+<script type="module" src="{{root}}src/price/main.ts"></script>
+</body>
+</html>

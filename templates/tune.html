@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="{{lang}}" data-root="{{root}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{tune.title}}</title>
+  <meta name="description" content="{{tune.description}}">
+  <link rel="icon" href="{{root}}logo.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="pt" href="{{site}}{{pathPt}}">
+  <link rel="alternate" hreflang="en" href="{{site}}{{pathEn}}">
+  <link rel="alternate" hreflang="x-default" href="{{site}}{{pathPt}}">
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="{{root}}src/style.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">{{common.skipContent}}</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="{{home}}"><img src="{{root}}logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="{{common.nav}}">
+      <a href="{{home}}#ferramentas">{{common.tools}}</a>
+      <a href="{{home}}#sobre">{{common.about}}</a>
+      <a href="{{common.siteHref}}">{{common.site}}</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">{{common.code}}</a>
+      <a class="lang" href="{{alt}}" hreflang="{{other}}" lang="{{other}}">{{common.switch}}</a>
+      <button class="theme" id="theme" type="button" aria-label="{{common.themeAria}}">{{common.theme}}</button>
+    </nav>
+  </div>
+</header>
+
+<main class="tool" id="conteudo">
+  <h1>{{tune.h1}}</h1>
+  <p class="lead">{{tune.lead}}</p>
+  <p><a href="?demo=1">{{tune.demo}}</a></p>
+
+  <section class="panel" id="s-file">
+    <div class="step">{{tune.step1}}</div>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="{{tune.dropAria}}">
+      {{tune.drop}}
+    </div>
+    <input type="file" id="file" accept=".3mf" hidden>
+    <div id="file-msg" role="status"></div>
+    <div id="summary" hidden></div>
+  </section>
+
+  <section class="panel" id="s-ctx" hidden>
+    <div class="step">{{tune.step2}}</div>
+    <div class="grid">
+      <label>{{tune.use}} <select id="use"></select></label>
+      <label>{{tune.priority}} <select id="priority"></select></label>
+      <label>{{tune.printingOn}} <input id="printing-on" maxlength="80" placeholder="{{tune.printingOnPh}}"></label>
+    </div>
+    <div class="grid" id="spools" style="margin-top:12px"></div>
+    <label style="margin-top:12px">{{tune.notes}} <textarea id="notes" maxlength="500" rows="3" style="min-height:70px;font-family:inherit;font-size:1rem" placeholder="{{tune.notesPh}}"></textarea></label>
+  </section>
+
+  <section class="panel" id="s-prompt" hidden>
+    <div class="step">{{tune.step3}}</div>
+    <p>{{tune.promptIntro}}</p>
+    <textarea id="prompt" readonly rows="10"></textarea>
+    <div class="row"><button class="primary" id="copy">{{tune.copy}}</button><span id="copy-msg" role="status"></span></div>
+  </section>
+
+  <section class="panel" id="s-reply" hidden>
+    <div class="step">{{tune.step4}}</div>
+    <p>{{tune.replyIntro}}</p>
+    <textarea id="reply" rows="6" placeholder='{"note":"…","changes":[…]}'></textarea>
+    <div class="row"><button class="primary" id="check">{{tune.check}}</button></div>
+    <div id="reply-msg" role="status"></div>
+  </section>
+
+  <section class="panel" id="s-result" hidden>
+    <div class="step">{{tune.step5}}</div>
+    <div id="note"></div>
+    <div id="changes"></div>
+    <div id="rejected"></div>
+    <div id="overrides"></div>
+    <div class="row"><button class="primary" id="download">{{tune.download}}</button><span id="dl-msg" role="status"></span></div>
+    <p class="lead" style="margin-top:12px">{{tune.afterDownload}}</p>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>{{common.licence}}</span>
+    <span>{{common.privacy}}</span>
+    <a href="{{common.siteHref}}">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">{{common.code}}</a>
+  </div>
+</footer>
+<script type="module" src="{{root}}src/tune/main.ts"></script>
+</body>
+</html>

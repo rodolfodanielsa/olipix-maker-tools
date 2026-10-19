@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Price calculator — Olipix Maker Tools</title>
+  <meta name="description" content="How much to charge for a 3D-printed piece: filament, energy, machine time, failures, margin and VAT. Live price, in your browser.">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="pt" href="https://rodolfodanielsa.github.io/olipix-maker-tools/price/">
+  <link rel="alternate" hreflang="en" href="https://rodolfodanielsa.github.io/olipix-maker-tools/en/price/">
+  <link rel="alternate" hreflang="x-default" href="https://rodolfodanielsa.github.io/olipix-maker-tools/price/">
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../../src/style.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../../logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="Main">
+      <a href="../#ferramentas">Tools</a>
+      <a href="../#sobre">About</a>
+      <a href="https://olipix-lab.vercel.app/en">Our website</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Code</a>
+      <a class="lang" href="../../price/" hreflang="pt" lang="pt">Português</a>
+      <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme">Theme</button>
+    </nav>
+  </div>
+</header>
+
+<main class="tool wide" id="conteudo">
+  <h1>Price calculator</h1>
+  <p class="lead">How much to charge for a 3D-printed piece. Weight and time come from the slicer; the rest are your costs. The price updates as you type and your values stay in this browser only.</p>
+  <p><a href="?demo=1">See a filled-in example</a></p>
+
+  <div class="mode" role="radiogroup" aria-label="Mode">
+    <label><input type="radio" name="mode" value="basic" checked> Basic <span>Material, energy and margin</span></label>
+    <label><input type="radio" name="mode" value="pro"> Professional <span>Machine time, failures, VAT, several pieces</span></label>
+  </div>
+
+  <div class="calc">
+    <form class="calc-form" id="form" autocomplete="off" onsubmit="return false">
+      <section class="panel">
+        <div class="step">The piece</div>
+        <div class="grid">
+          <label data-pro>Name (optional) <input id="name" maxlength="80" placeholder="e.g. Small vase"></label>
+          <label>Filament weight (g) <input id="grams" type="number" inputmode="decimal" min="0" step="any"></label>
+          <label>Print time (hours) <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
+          <label>Print time (minutes) <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          <label data-pro>Identical pieces on the plate <input id="pieces" type="number" inputmode="numeric" min="1" step="1" value="1"></label>
+        </div>
+        <p class="hint">Weight and time for the whole plate, as the slicer shows them. With several pieces, the price is split between them.</p>
+      </section>
+
+      <section class="panel">
+        <div class="step">Your costs</div>
+        <div class="grid">
+          <label>Filament price (€/kg) <input id="filamentPerKg" type="number" inputmode="decimal" min="0" step="any" value="20"></label>
+          <label>Printer power draw (W) <input id="powerW" type="number" inputmode="decimal" min="0" step="any" value="120"></label>
+          <label>Energy price (€/kWh) <input id="kwh" type="number" inputmode="decimal" min="0" step="any" value="0.2"></label>
+          <label data-pro>Machine wear (€/hour) <input id="machinePerHour" type="number" inputmode="decimal" min="0" step="any" value="1"></label>
+          <label data-pro>Plate preparation (€) <input id="setup" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
+          <label data-pro>Allowance for failures (%) <input id="failurePercent" type="number" inputmode="decimal" min="0" step="any" value="5"></label>
+        </div>
+        <p class="hint">The starting values are just a starting point: replace them with your own. Power draw is on the printer's spec sheet or measurable with a power meter plug; the energy price is on your electricity bill.</p>
+      </section>
+
+      <section class="panel">
+        <div class="step">Your profit</div>
+        <div class="grid">
+          <label>Work out the profit as
+            <select id="profitMode"><option value="margin">Margin in % on top of cost</option><option value="fixed">Fixed amount (€)</option></select>
+          </label>
+          <label id="marginBox">Margin (%) <input id="marginPercent" type="number" inputmode="decimal" min="0" step="any" value="30"></label>
+          <label id="fixedBox" hidden>Profit (€, whole plate) <input id="fixedProfit" type="number" inputmode="decimal" min="0" step="any"></label>
+          <label data-pro>VAT (%) <input id="vatPercent" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
+          <label data-pro>Round each piece up
+            <select id="rounding"><option value="none">Don't round</option><option value="euro">To the euro</option><option value="ninety">To end in .90</option></select>
+          </label>
+        </div>
+      </section>
+    </form>
+
+    <aside class="calc-result" aria-label="Suggested price">
+      <div class="price-box">
+        <p class="price-label">Suggested price <span id="per-piece" hidden>per piece</span></p>
+        <p class="price" id="price" aria-live="polite">—</p>
+        <p class="price-sub" id="price-sub">Fill in the weight or the time and the price shows up here.</p>
+        <dl class="lines" id="lines"></dl>
+      </div>
+      <div class="share" id="share" hidden>
+        <div class="mode small" role="radiogroup" aria-label="Who the text is for">
+          <label><input type="radio" name="audience" value="me" checked> For me</label>
+          <label><input type="radio" name="audience" value="client"> For the customer</label>
+        </div>
+        <textarea id="share-text" readonly rows="7" aria-label="Quote text"></textarea>
+        <div class="row"><button class="primary" id="copy" type="button">Copy</button><button id="reset" type="button">New quote</button><span id="copy-msg" role="status"></span></div>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>MIT licence, code only.</span>
+    <span>No cookies, no analytics.</span>
+    <a href="https://olipix-lab.vercel.app/en">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Code</a>
+  </div>
+</footer>
+<script type="module" src="../../src/price/main.ts"></script>
+</body>
+</html>

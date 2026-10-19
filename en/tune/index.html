@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tune 3MF — Olipix Maker Tools</title>
+  <meta name="description" content="Fine-tune the settings of a Bambu Studio project with the help of your AI, without uploading the file.">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="pt" href="https://rodolfodanielsa.github.io/olipix-maker-tools/tune/">
+  <link rel="alternate" hreflang="en" href="https://rodolfodanielsa.github.io/olipix-maker-tools/en/tune/">
+  <link rel="alternate" hreflang="x-default" href="https://rodolfodanielsa.github.io/olipix-maker-tools/tune/">
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../../src/style.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../../logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="Main">
+      <a href="../#ferramentas">Tools</a>
+      <a href="../#sobre">About</a>
+      <a href="https://olipix-lab.vercel.app/en">Our website</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Code</a>
+      <a class="lang" href="../../tune/" hreflang="pt" lang="pt">Português</a>
+      <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme">Theme</button>
+    </nav>
+  </div>
+</header>
+
+<main class="tool" id="conteudo">
+  <h1>Tune 3MF</h1>
+  <p class="lead">Open a Bambu Studio project (unsliced), copy the prompt to the AI you prefer, paste its answer and download the <code>-tuned.3mf</code>. The file never leaves the browser; only the prompt text does, and you can read it before copying.</p>
+  <p><a href="?demo=1">Try it with an example project</a></p>
+
+  <section class="panel" id="s-file">
+    <div class="step">1. Project</div>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose a 3MF file">
+      Drop the <strong>.3mf</strong> here or click to choose
+    </div>
+    <input type="file" id="file" accept=".3mf" hidden>
+    <div id="file-msg" role="status"></div>
+    <div id="summary" hidden></div>
+  </section>
+
+  <section class="panel" id="s-ctx" hidden>
+    <div class="step">2. Context</div>
+    <div class="grid">
+      <label>What the piece is for <select id="use"></select></label>
+      <label>Priority <select id="priority"></select></label>
+      <label>Printer you'll print on (optional) <input id="printing-on" maxlength="80" placeholder="e.g. Bambu Lab P1S"></label>
+    </div>
+    <div class="grid" id="spools" style="margin-top:12px"></div>
+    <label style="margin-top:12px">Notes (optional) <textarea id="notes" maxlength="500" rows="3" style="min-height:70px;font-family:inherit;font-size:1rem" placeholder="e.g. it has to fit into another piece with a 0.2 mm gap"></textarea></label>
+  </section>
+
+  <section class="panel" id="s-prompt" hidden>
+    <div class="step">3. Prompt</div>
+    <p>Copy this into ChatGPT, Claude, Gemini or a local model. Check the text: it is everything that will be sent.</p>
+    <textarea id="prompt" readonly rows="10"></textarea>
+    <div class="row"><button class="primary" id="copy">Copy prompt</button><span id="copy-msg" role="status"></span></div>
+  </section>
+
+  <section class="panel" id="s-reply" hidden>
+    <div class="step">4. Answer</div>
+    <p>Paste the AI's answer here (the JSON).</p>
+    <textarea id="reply" rows="6" placeholder='{"note":"…","changes":[…]}'></textarea>
+    <div class="row"><button class="primary" id="check">Check answer</button></div>
+    <div id="reply-msg" role="status"></div>
+  </section>
+
+  <section class="panel" id="s-result" hidden>
+    <div class="step">5. Changes</div>
+    <div id="note"></div>
+    <div id="changes"></div>
+    <div id="rejected"></div>
+    <div id="overrides"></div>
+    <div class="row"><button class="primary" id="download">Download -tuned.3mf</button><span id="dl-msg" role="status"></span></div>
+    <p class="lead" style="margin-top:12px">Open the file in Bambu Studio: the changed settings show up marked as edited. Slice it there.</p>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>MIT licence, code only.</span>
+    <span>No cookies, no analytics.</span>
+    <a href="https://olipix-lab.vercel.app/en">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Code</a>
+  </div>
+</footer>
+<script type="module" src="../../src/tune/main.ts"></script>
+</body>
+</html>

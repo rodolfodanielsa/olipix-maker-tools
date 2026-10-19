@@ -23,3 +23,8 @@ Invariantes (cada um foi um bug):
 
 ## Comandos
 `npm test` · `npm run build` · `npm run dev`
+
+## Idiomas
+- Nunca editar à mão `index.html`, `tune/`, `price/` nem `en/`: são gerados por `npm run pages` a partir de `templates/` e `i18n/*.json`. Texto novo entra nos dois dicionários.
+- `src/tune/spec.ts` e `tuner.ts` seguem o `ProjectTuner` do home-deck: os nomes em inglês das definições ficam em `src/tune/labels.ts`, não em `spec.ts`.
+- O prompt em inglês (`prompt.system` em `i18n/en.json`) tem de pedir motivos em inglês.

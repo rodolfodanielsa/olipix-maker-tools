@@ -13,6 +13,10 @@ Ferramentas gratuitas para quem imprime em 3D. Páginas estáticas: tudo corre n
 
 **Contador de utilizações:** desligado (`COUNTER_URL = null` em `src/counter.ts`). Ao ligar um backend, atualizar o "sem cookies nem analytics" em `index.html`, `tune/index.html` e aqui. Só mostra a partir de 10 utilizações.
 
+## Idiomas
+
+Português em `/`, `/tune/`, `/price/` e inglês em `/en/`, `/en/tune/`, `/en/price/`. Os seis `index.html` são **gerados**: edita `templates/*.html` e os dicionários `i18n/pt.json` e `i18n/en.json` (secção `html` para as páginas, `js` para os textos de `src/`), e corre `npm run pages` (o `dev` e o `build` já o fazem). Os testes falham se um ficheiro gerado estiver desatualizado, se faltar uma chave num idioma ou se uma definição do Ajustar 3MF não tiver nome em inglês (`src/tune/labels.ts`). A página lê o idioma de `<html lang>`.
+
 ## Desenvolvimento
 
 ```bash

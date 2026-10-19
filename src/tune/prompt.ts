@@ -1,36 +1,14 @@
+import { t } from '../i18n';
 import { allowed } from './spec';
 import type { Proposed, Summary } from './tuner';
 
-export const USES: Record<string, string> = {
-  decorative: 'Decorativa ou visual',
-  functional: 'Funcional (encaixes, esforço mecânico)',
-  outdoor: 'Exterior (sol, humidade)',
-  prototype: 'Protótipo rápido',
-  miniature: 'Miniatura com muito detalhe',
-};
+const USE_KEYS = ['decorative', 'functional', 'outdoor', 'prototype', 'miniature'];
+const PRIORITY_KEYS = ['balanced', 'speed', 'quality', 'strength', 'material'];
 
-export const PRIORITIES: Record<string, string> = {
-  balanced: 'Equilibrada',
-  speed: 'Velocidade',
-  quality: 'Qualidade de superfície',
-  strength: 'Resistência',
-  material: 'Poupar material',
-};
+const labels = (group: string, keys: string[]): Record<string, string> => Object.fromEntries(keys.map((k) => [k, t(`prompt.${group}.${k}`)]));
 
-export const SYSTEM = `És um especialista em impressão 3D FDM com Bambu Studio. Recebes as definições atuais de um projeto,
-a impressora, o filamento, o uso da peça e a prioridade. Sugere só as alterações que valem mesmo a pena
-para esta peça, no máximo 10, cada uma com um motivo curto em português de Portugal.
-Usa apenas chaves que aparecem em "settings" e respeita o "allowed" de cada uma (intervalo ou lista).
-O "use" e a "priority" mandam em tudo o resto. Numa peça decorativa ou miniatura, ou com prioridade de
-qualidade, não baixes a ventoinha nem subas a temperatura para ganhar resistência: isso piora pontes,
-saliências e texto fino. Só sugere alterações de resistência quando o uso for funcional ou exterior, ou a
-prioridade for resistência.
-Com mais de uma entrada em "filaments" (várias cores), nunca desligues a torre de purga (enable_prime_tower).
-Não sugiras mudar uma chave que todos os objetos sobrepõem em "per_object_overrides": não teria efeito.
-Se nada precisar de mudar, devolve uma lista vazia.
-Escreve sempre em "note" uma ou duas frases curtas: porque estas alterações (ou nenhuma), e uma alteração
-opcional que ficou de fora, se houver, com o porquê.
-Responde só com JSON, sem texto à volta: {"note":"...","changes":[{"key":"layer_height","value":"0.16","reason":"..."}]}`;
+export const uses = (): Record<string, string> => labels('use', USE_KEYS);
+export const priorities = (): Record<string, string> => labels('priority', PRIORITY_KEYS);
 
 export interface Choices {
   use: string;
@@ -71,8 +49,8 @@ export function payload(summary: Summary, c: Choices): Record<string, unknown> {
           spool: c.spools[f.slot]?.trim().slice(0, 80) || null,
         }),
       ),
-    use: USES[c.use] ?? USES.decorative,
-    priority: PRIORITIES[c.priority] ?? PRIORITIES.balanced,
+    use: uses()[c.use] ?? uses().decorative,
+    priority: priorities()[c.priority] ?? priorities().balanced,
     notes: notes || null,
     plates: summary.plates,
     objects: [...new Set(summary.objects)].slice(0, 30),
@@ -83,7 +61,7 @@ export function payload(summary: Summary, c: Choices): Record<string, unknown> {
 
 /** The text the user pastes into their AI: instructions first, then the project data. */
 export function buildPrompt(summary: Summary, c: Choices): string {
-  return `${SYSTEM}\n\nDados do projeto (JSON):\n${JSON.stringify(payload(summary, c), null, 2)}\n`;
+  return `${t('prompt.system')}\n\n${t('prompt.data')}:\n${JSON.stringify(payload(summary, c), null, 2)}\n`;
 }
 
 export class ReplyError extends Error {}
@@ -103,9 +81,9 @@ function decode(reply: string): Record<string, unknown> | null {
 /** The AI's reply, tolerant of code fences and chatter around the JSON; the changes still go through validate(). */
 export function parseReply(reply: string): { changes: Proposed[]; note: string | null } {
   const json = decode(reply);
-  if (!json) throw new ReplyError('A resposta não veio em JSON. Pede à AI para responder só com o JSON.');
+  if (!json) throw new ReplyError(t('prompt.notJson'));
   const list = json.changes ?? json.alteracoes;
-  if (!Array.isArray(list)) throw new ReplyError('A resposta não traz a lista "changes". Pede à AI para responder no formato indicado.');
+  if (!Array.isArray(list)) throw new ReplyError(t('prompt.noList'));
   const changes: Proposed[] = [];
   for (const item of list) {
     if (item && typeof item === 'object' && !Array.isArray(item)) {

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Olipix Maker Tools</title>
+  <meta name="description" content="Free tools for people who 3D print, from Olipix Creative Lab. They run in your browser: no account, and your files are never uploaded.">
+  <meta name="theme-color" content="#2c4a3e">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="pt" href="https://rodolfodanielsa.github.io/olipix-maker-tools/">
+  <link rel="alternate" hreflang="en" href="https://rodolfodanielsa.github.io/olipix-maker-tools/en/">
+  <link rel="alternate" hreflang="x-default" href="https://rodolfodanielsa.github.io/olipix-maker-tools/">
+  <link rel="preload" href="../fonts/cal-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../src/style.css">
+</head>
+<body>
+<a class="skip" href="#ferramentas">Skip to the tools</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="../logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="Main">
+      <a href="#ferramentas">Tools</a>
+      <a href="#confianca">Why trust us</a>
+      <a href="#sobre">About</a>
+      <a href="https://olipix-lab.vercel.app/en">Our website</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Code</a>
+      <a class="lang" href="../" hreflang="pt" lang="pt">Português</a>
+      <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme">Theme</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Workbench tools for people who 3D print</h1>
+        <p class="lead">Free, open and running in your browser. Your files stay on your computer.</p>
+        <div class="row">
+          <a class="btn primary" href="./tune/">Open Tune 3MF</a>
+          <a class="btn ghost" href="./tune/?demo=1">Try it with an example project</a>
+        </div>
+      </div>
+      <figure class="diff" style="margin:0" aria-label="Example of what Tune 3MF returns">
+        <svg class="ruler" id="ruler-h" aria-hidden="true"></svg>
+        <svg class="ruler v" id="ruler-v" aria-hidden="true"></svg>
+        <p class="file">Example: decorative-vase-tuned.3mf</p>
+        <ul>
+          <li>
+            <span class="k">Layer height (mm)</span>
+            <span class="v"><span class="from">0.2</span><span class="arrow">→</span><span class="to">0.16</span></span>
+            <span class="why">More detail on the curves</span>
+          </li>
+          <li>
+            <span class="k">Infill</span>
+            <span class="v"><span class="from">15%</span><span class="arrow">→</span><span class="to">10%</span></span>
+            <span class="why">Decorative piece: saves material</span>
+          </li>
+          <li>
+            <span class="k">Nozzle temperature (°C)</span>
+            <span class="v"><span class="from">220</span><span class="arrow">→</span><span class="to">215</span></span>
+            <span class="why">Less stringing on thin parts</span>
+          </li>
+        </ul>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="ferramentas">
+    <div class="wrap">
+      <h2>On the bench</h2>
+      <p class="lead">Two tools ready, one more on the way.</p>
+      <div class="tools">
+        <article class="tool-main">
+          <h3>Tune 3MF</h3>
+          <p>You open your Bambu Studio project, copy a prompt to the AI you prefer and paste its answer back. You get the same project with the settings tuned for that piece.</p>
+          <ul>
+            <li>It only touches a closed list of settings, within safe ranges.</li>
+            <li>It shows every change with the reason; untick what you don't want.</li>
+            <li>It marks the changed settings as edited in Bambu Studio.</li>
+          </ul>
+          <a class="btn primary" href="./tune/">Open Tune 3MF</a>
+          <span class="uses" data-uses="tune" hidden></span>
+          <p class="facts">Free · No account · Unsliced projects</p>
+        </article>
+        <div class="drawers">
+          <a class="drawer ready" href="./price/">
+            <h3>Price calculator</h3>
+            <p>Filament, energy, machine time, failures, margin and VAT, with the price updating as you type.</p>
+          </a>
+          <div class="drawer">
+            <h3>Spool labels</h3>
+            <p>QR codes and labels for 15 mm tape. <span class="soon">Coming soon</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="confianca">
+    <div class="wrap">
+      <h2>Why you can trust them</h2>
+      <p class="lead">Every promise comes with a way to check it.</p>
+      <div class="proofs">
+        <div class="proof">
+          <h3>Your file never leaves your computer</h3>
+          <p>Everything is calculated in the browser. Open the Network tab in your developer tools: there are no requests carrying your project. The only text that leaves is the prompt you copy, and you read it first.</p>
+        </div>
+        <div class="proof">
+          <h3>Open source, MIT licence</h3>
+          <p>You can read, copy and adapt it. <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">See the code on GitHub</a>.</p>
+        </div>
+        <div class="proof">
+          <h3>Tested, and the AI's answer is never accepted blindly</h3>
+          <p>Every change is validated against your file: unknown keys, out-of-range values and purge towers switched off in multicolour projects are rejected. <a href="https://github.com/rodolfodanielsa/olipix-maker-tools/actions">See the automated tests</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mat" id="sobre">
+    <div class="wrap about">
+      <div>
+        <h2>Made in the Olipix Creative Lab workshop</h2>
+        <p>Olipix Creative Lab is an independent studio: we design and print decorative pieces, and we like a challenge. The harder the fit or the shape, the more we want to try it.</p>
+        <p>These tools were born in our own workshop. We use them to prepare projects, quote and print our pieces, and we decided to share them: people who 3D print lose hours on the same problems, and a tool that already solves one of them shouldn't stay in a drawer.</p>
+        <p>We'll keep adding the ones that pass the test of daily use.</p>
+        <ul class="links">
+          <li><a href="https://olipix-lab.vercel.app/en"><img src="../logo.svg" alt="" width="28" height="28">Olipix Lab website</a></li>
+          <li><a href="https://makerworld.com/en/@olipix.lab/upload"><img src="../makerworld.svg" alt="" width="28" height="28">MakerWorld</a></li>
+          <li><a href="https://instagram.com/olipix.lab"><img src="../instagram.svg" alt="" width="28" height="28">Instagram</a></li>
+        </ul>
+      </div>
+      <figure style="margin:0">
+        <img class="photo" src="../studio.webp" alt="The workshop bench: 3D printers, shelves of filament spools and drawers." width="1600" height="1200" loading="lazy">
+        <figcaption class="caption">The bench where these tools are used.</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>MIT licence, code only. The Olipix name and logo are not included.</span>
+    <span>No cookies, no analytics.</span>
+    <a href="https://olipix-lab.vercel.app/en">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Code</a>
+  </div>
+</footer>
+<script type="module" src="../src/home.ts"></script>
+</body>
+</html>

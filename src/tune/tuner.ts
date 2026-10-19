@@ -1,4 +1,6 @@
 import JSZip from 'jszip';
+import { t } from '../i18n';
+import { labelOf } from './labels';
 import { BED_KEYS, FILAMENT, PROCESS, Scope, Spec, specFor } from './spec';
 
 const SETTINGS = 'Metadata/project_settings.config';
@@ -93,10 +95,10 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
   try {
     zip = await JSZip.loadAsync(data);
   } catch {
-    throw new TuneError('Não foi possível abrir o ficheiro 3MF.');
+    throw new TuneError(t('tuner.open'));
   }
   if (Object.keys(zip.files).some((n) => /^Metadata\/plate_\d+\.gcode$/.test(n))) {
-    throw new TuneError('Este 3MF já está fatiado. Envia o projeto (.3mf) guardado no Bambu Studio, sem G-code: mudar definições num ficheiro fatiado deixava o G-code desatualizado.');
+    throw new TuneError(t('tuner.sliced'));
   }
   let project: Project = {};
   try {
@@ -107,7 +109,7 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
     // treated as missing below
   }
   if (!Object.keys(project).length) {
-    throw new TuneError('Este 3MF não tem definições do Bambu Studio (Metadata/project_settings.config). Abre-o e guarda-o no Bambu Studio primeiro.');
+    throw new TuneError(t('tuner.noSettings'));
   }
 
   const modelFile = zip.file('Metadata/model_settings.config');
@@ -138,7 +140,7 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
       const subtype = part.getAttribute('subtype') ?? '';
       if (subtype === '' || subtype === 'normal_part') used.add(slot);
     }
-    name ??= `objeto ${objects.length + 1}`;
+    name ??= t('tuner.object', { n: objects.length + 1 });
     objects.push(name);
     if (keys.length) overrides.push({ object: name, keys: [...new Set(keys)] });
   }
@@ -162,7 +164,7 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
   const settings: Setting[] = [];
   for (const [key, { spec, scope }] of specs(project)) {
     const value = single(project[key]);
-    if (value !== null) settings.push({ key, label: spec.label, value, scope });
+    if (value !== null) settings.push({ key, label: labelOf(key, spec), value, scope });
   }
   const nozzle = single(project.nozzle_diameter);
 
@@ -193,22 +195,22 @@ export function validate(summary: Summary, proposed: Proposed[]): { changes: Cha
     const key = typeof p.key === 'string' ? p.key.trim() : '';
     const cur = current.get(key);
     if (!cur) {
-      rejected.push({ key: key === '' ? '?' : key.slice(0, 60), why: 'chave fora da lista que se pode mudar neste ficheiro' });
+      rejected.push({ key: key === '' ? '?' : key.slice(0, 60), why: t('tuner.badKey') });
       continue;
     }
     if (changes.has(key)) continue;
     const spec = specFor(key);
     const value = spec ? normalise(spec, p.value) : null;
     if (value === null) {
-      rejected.push({ key, why: 'valor inválido ou fora do intervalo' });
+      rejected.push({ key, why: t('tuner.badValue') });
       continue;
     }
     if (key === 'layer_height' && summary.nozzle !== null && Number(value) > 0.8 * summary.nozzle) {
-      rejected.push({ key, why: 'mais de 80% do diâmetro do bico' });
+      rejected.push({ key, why: t('tuner.nozzle80') });
       continue;
     }
     if (key === 'enable_prime_tower' && value === '0' && colours > 1) {
-      rejected.push({ key, why: `o projeto usa ${colours} cores: sem torre de purga as trocas misturam cores` });
+      rejected.push({ key, why: t('tuner.prime', { n: colours }) });
       continue;
     }
     if (same(cur.value, value)) continue;
@@ -238,7 +240,7 @@ export async function apply(loaded: Loaded, changes: { key: string; after: strin
   for (const c of changes) {
     const entry = known.get(c.key);
     const value = entry ? normalise(entry.spec, c.after) : null;
-    if (!entry || value === null) throw new TuneError(`Alteração inválida: ${c.key}`);
+    if (!entry || value === null) throw new TuneError(t('tuner.badChange', { key: c.key }));
     const old = project[c.key];
     project[c.key] = Array.isArray(old) ? old.map(() => value) : value;
     if (diff) {

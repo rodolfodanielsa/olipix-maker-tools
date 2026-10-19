@@ -1,5 +1,6 @@
-import { buildPrompt, parseReply, PRIORITIES, USES, type Choices } from './prompt';
 import { countUse } from '../counter';
+import { t } from '../i18n';
+import { buildPrompt, parseReply, priorities, uses, type Choices } from './prompt';
 import { initTheme } from '../theme';
 import { apply, load, TuneError, validate, type Change, type Loaded } from './tuner';
 
@@ -47,10 +48,10 @@ function renderSummary(l: Loaded): void {
   const s = l.summary;
   const dl = el('dl');
   const row = (k: string, v: Node | string) => dl.append(el('dt', {}, k), el('dd', {}, v));
-  row('Impressora', s.printer ?? 'desconhecida');
-  if (s.nozzle !== null) row('Bico', `${s.nozzle} mm`);
-  if (s.bed) row('Base', s.bed);
-  row('Objetos', s.objects.length ? `${s.objects.length}: ${[...new Set(s.objects)].slice(0, 5).join(', ')}${s.objects.length > 5 ? '…' : ''}` : '—');
+  row(t('tune.printer'), s.printer ?? t('tune.unknown'));
+  if (s.nozzle !== null) row(t('tune.nozzle'), `${s.nozzle} mm`);
+  if (s.bed) row(t('tune.bed'), s.bed);
+  row(t('tune.objects'), s.objects.length ? `${s.objects.length}: ${[...new Set(s.objects)].slice(0, 5).join(', ')}${s.objects.length > 5 ? '…' : ''}` : '—');
   const used = s.filaments.filter((f) => f.used);
   const fil = el('span');
   used.forEach((f, n) => {
@@ -62,9 +63,9 @@ function renderSummary(l: Loaded): void {
     }
     fil.append(`${f.type}${f.profile ? ` (${f.profile})` : ''}`);
   });
-  row('Filamentos usados', used.length ? fil : '—');
-  row('Definições ajustáveis', String(s.settings.length));
-  if (s.savedBy) row('Guardado por', s.savedBy);
+  row(t('tune.filamentsUsed'), used.length ? fil : '—');
+  row(t('tune.adjustable'), String(s.settings.length));
+  if (s.savedBy) row(t('tune.savedBy'), s.savedBy);
   const box = $('summary');
   box.replaceChildren(dl);
   box.hidden = false;
@@ -75,11 +76,11 @@ function renderSpools(l: Loaded): void {
   box.replaceChildren();
   const used = l.summary.filaments.filter((f) => f.used);
   for (const f of used) {
-    const input = el('input', { maxLength: 80, placeholder: 'ex.: Bambu PLA Matte Red' });
+    const input = el('input', { maxLength: 80, placeholder: t('tune.spoolPh') });
     input.dataset.slot = String(f.slot);
     input.addEventListener('input', refreshPrompt);
     const colour = f.color ?? '';
-    box.append(el('label', {}, `Bobine para a cor ${f.slot} — ${f.type} ${colour} (opcional)`, input));
+    box.append(el('label', {}, t('tune.spoolLabel', { slot: f.slot, type: f.type, colour }), input));
   }
 }
 
@@ -95,13 +96,13 @@ async function open(file: File): Promise<void> {
   try {
     loaded = await load(await file.arrayBuffer());
   } catch (e) {
-    msg.replaceChildren(notice('error', e instanceof TuneError ? e.message : 'Não foi possível ler o ficheiro.'));
+    msg.replaceChildren(notice('error', e instanceof TuneError ? e.message : t('tune.readFail')));
     return;
   }
   fileName = file.name.replace(/\.3mf$/i, '');
   renderSummary(loaded);
   if (!loaded.summary.settings.length) {
-    msg.replaceChildren(notice('error', 'Este projeto não tem definições que se possam ajustar de forma segura.'));
+    msg.replaceChildren(notice('error', t('tune.noSettings')));
     return;
   }
   renderSpools(loaded);
@@ -110,10 +111,10 @@ async function open(file: File): Promise<void> {
 }
 
 function renderResult(note: string | null, rejected: { key: string; why: string }[]): void {
-  $('note').replaceChildren(...(note ? [notice('', `Nota da AI: ${note}`)] : []));
+  $('note').replaceChildren(...(note ? [notice('', t('tune.aiNote', { note }))] : []));
   const list = $('changes');
   list.replaceChildren();
-  if (!changes.length) list.append(notice('', 'A AI não sugere alterações válidas para este projeto.'));
+  if (!changes.length) list.append(notice('', t('tune.noChanges')));
   changes.forEach((c, n) => {
     const box = el('input', { type: 'checkbox', checked: true, id: `c${n}` });
     box.dataset.key = c.key;
@@ -128,11 +129,11 @@ function renderResult(note: string | null, rejected: { key: string; why: string 
   const rej = $('rejected');
   rej.replaceChildren();
   if (rejected.length) {
-    rej.append(notice('error', `Ignoradas (${rejected.length}): ${rejected.map((r) => `${r.key} — ${r.why}`).join('; ')}`));
+    rej.append(notice('error', t('tune.ignored', { n: rejected.length, list: rejected.map((r) => `${r.key} — ${r.why}`).join('; ') })));
   }
   const ov = loaded?.summary.overrides ?? [];
   $('overrides').replaceChildren(
-    ...(ov.length ? [notice('', `Alguns objetos têm ajustes próprios (${ov.map((o) => `${o.object}: ${o.keys.join(', ')}`).join('; ')}). Uma alteração global não lhes toca.`)] : []),
+    ...(ov.length ? [notice('', t('tune.overrides', { list: ov.map((o) => `${o.object}: ${o.keys.join(', ')}`).join('; ') }))] : []),
   );
   updateDownload();
   show('s-result', true);
@@ -158,7 +159,7 @@ function check(): void {
     renderResult(reply.note, result.rejected);
   } catch (e) {
     show('s-result', false);
-    msg.replaceChildren(notice('error', e instanceof Error ? e.message : 'Resposta inválida.'));
+    msg.replaceChildren(notice('error', e instanceof Error ? e.message : t('tune.invalidReply')));
   }
 }
 
@@ -167,15 +168,15 @@ async function download(): Promise<void> {
   const msg = $('dl-msg');
   try {
     const blob = await apply(loaded, selected());
-    const a = el('a', { href: URL.createObjectURL(blob), download: `${fileName}-ajustado.3mf` });
+    const a = el('a', { href: URL.createObjectURL(blob), download: `${fileName}${t('tune.suffix')}.3mf` });
     document.body.append(a);
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 10_000);
-    msg.textContent = 'Feito.';
+    msg.textContent = t('tune.done');
     countUse('tune');
   } catch (e) {
-    msg.textContent = e instanceof Error ? e.message : 'Falhou.';
+    msg.textContent = e instanceof Error ? e.message : t('tune.failed');
   }
 }
 
@@ -183,15 +184,15 @@ async function copy(): Promise<void> {
   const text = $<HTMLTextAreaElement>('prompt');
   try {
     await navigator.clipboard.writeText(text.value);
-    $('copy-msg').textContent = 'Copiado.';
+    $('copy-msg').textContent = t('tune.copied');
   } catch {
     text.select();
-    $('copy-msg').textContent = 'Seleciona o texto e copia manualmente.';
+    $('copy-msg').textContent = t('tune.copyManual');
   }
 }
 
-fill($<HTMLSelectElement>('use'), USES);
-fill($<HTMLSelectElement>('priority'), PRIORITIES);
+fill($<HTMLSelectElement>('use'), uses());
+fill($<HTMLSelectElement>('priority'), priorities());
 for (const id of ['use', 'priority', 'printing-on', 'notes']) $(id).addEventListener('input', refreshPrompt);
 
 const drop = $('drop');
@@ -225,8 +226,8 @@ $('download').addEventListener('click', () => void download());
 initTheme(document.getElementById('theme'));
 
 if (new URLSearchParams(location.search).get('demo') === '1') {
-  fetch(new URL('../sample.3mf', location.href))
+  fetch(new URL(`${document.documentElement.dataset.root ?? '../'}sample.3mf`, location.href))
     .then((r) => r.blob())
     .then((b) => open(new File([b], 'vaso-decorativo.3mf')))
-    .catch(() => $('file-msg').replaceChildren(notice('error', 'Não foi possível carregar o projeto de exemplo.')));
+    .catch(() => $('file-msg').replaceChildren(notice('error', t('tune.demoFail'))));
 }

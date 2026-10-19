@@ -4,7 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "pages": "node scripts/pages.mjs",
+    "predev": "npm run pages",
     "dev": "vite",
+    "prebuild": "npm run pages",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run"

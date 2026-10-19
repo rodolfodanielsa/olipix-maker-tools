@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="{{lang}}" data-root="{{root}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{home.title}}</title>
+  <meta name="description" content="{{home.description}}">
+  <meta name="theme-color" content="#2c4a3e">
+  <link rel="icon" href="{{root}}logo.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="pt" href="{{site}}{{pathPt}}">
+  <link rel="alternate" hreflang="en" href="{{site}}{{pathEn}}">
+  <link rel="alternate" hreflang="x-default" href="{{site}}{{pathPt}}">
+  <link rel="preload" href="{{root}}fonts/cal-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="{{root}}src/style.css">
+</head>
+<body>
+<a class="skip" href="#ferramentas">{{home.skip}}</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="{{home}}"><img src="{{root}}logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="{{common.nav}}">
+      <a href="#ferramentas">{{common.tools}}</a>
+      <a href="#confianca">{{home.navTrust}}</a>
+      <a href="#sobre">{{common.about}}</a>
+      <a href="{{common.siteHref}}">{{common.site}}</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">{{common.code}}</a>
+      <a class="lang" href="{{alt}}" hreflang="{{other}}" lang="{{other}}">{{common.switch}}</a>
+      <button class="theme" id="theme" type="button" aria-label="{{common.themeAria}}">{{common.theme}}</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>{{home.h1}}</h1>
+        <p class="lead">{{home.lead}}</p>
+        <div class="row">
+          <a class="btn primary" href="{{home}}tune/">{{home.openTune}}</a>
+          <a class="btn ghost" href="{{home}}tune/?demo=1">{{home.tryDemo}}</a>
+        </div>
+      </div>
+      <figure class="diff" style="margin:0" aria-label="{{home.diffAria}}">
+        <svg class="ruler" id="ruler-h" aria-hidden="true"></svg>
+        <svg class="ruler v" id="ruler-v" aria-hidden="true"></svg>
+        <p class="file">{{home.diffFile}}</p>
+        <ul>
+          <li>
+            <span class="k">{{home.diff1k}}</span>
+            <span class="v"><span class="from">0.2</span><span class="arrow">→</span><span class="to">0.16</span></span>
+            <span class="why">{{home.diff1why}}</span>
+          </li>
+          <li>
+            <span class="k">{{home.diff2k}}</span>
+            <span class="v"><span class="from">15%</span><span class="arrow">→</span><span class="to">10%</span></span>
+            <span class="why">{{home.diff2why}}</span>
+          </li>
+          <li>
+            <span class="k">{{home.diff3k}}</span>
+            <span class="v"><span class="from">220</span><span class="arrow">→</span><span class="to">215</span></span>
+            <span class="why">{{home.diff3why}}</span>
+          </li>
+        </ul>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="ferramentas">
+    <div class="wrap">
+      <h2>{{home.toolsH2}}</h2>
+      <p class="lead">{{home.toolsLead}}</p>
+      <div class="tools">
+        <article class="tool-main">
+          <h3>{{home.tuneH3}}</h3>
+          <p>{{home.tuneP}}</p>
+          <ul>
+            <li>{{home.tuneLi1}}</li>
+            <li>{{home.tuneLi2}}</li>
+            <li>{{home.tuneLi3}}</li>
+          </ul>
+          <a class="btn primary" href="{{home}}tune/">{{home.openTune}}</a>
+          <span class="uses" data-uses="tune" hidden></span>
+          <p class="facts">{{home.tuneFacts}}</p>
+        </article>
+        <div class="drawers">
+          <a class="drawer ready" href="{{home}}price/">
+            <h3>{{home.priceH3}}</h3>
+            <p>{{home.priceP}}</p>
+          </a>
+          <div class="drawer">
+            <h3>{{home.labelsH3}}</h3>
+            <p>{{home.labelsP}} <span class="soon">{{home.soon}}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="confianca">
+    <div class="wrap">
+      <h2>{{home.trustH2}}</h2>
+      <p class="lead">{{home.trustLead}}</p>
+      <div class="proofs">
+        <div class="proof">
+          <h3>{{home.proof1h}}</h3>
+          <p>{{home.proof1p}}</p>
+        </div>
+        <div class="proof">
+          <h3>{{home.proof2h}}</h3>
+          <p>{{home.proof2p}}</p>
+        </div>
+        <div class="proof">
+          <h3>{{home.proof3h}}</h3>
+          <p>{{home.proof3p}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mat" id="sobre">
+    <div class="wrap about">
+      <div>
+        <h2>{{home.aboutH2}}</h2>
+        <p>{{home.about1}}</p>
+        <p>{{home.about2}}</p>
+        <p>{{home.about3}}</p>
+        <ul class="links">
+          <li><a href="{{common.siteHref}}"><img src="{{root}}logo.svg" alt="" width="28" height="28">{{home.linkSite}}</a></li>
+          <li><a href="https://makerworld.com/en/@olipix.lab/upload"><img src="{{root}}makerworld.svg" alt="" width="28" height="28">MakerWorld</a></li>
+          <li><a href="https://instagram.com/olipix.lab"><img src="{{root}}instagram.svg" alt="" width="28" height="28">Instagram</a></li>
+        </ul>
+      </div>
+      <figure style="margin:0">
+        <img class="photo" src="{{root}}studio.webp" alt="{{home.photoAlt}}" width="1600" height="1200" loading="lazy">
+        <figcaption class="caption">{{home.caption}}</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>{{common.licence}} {{home.footLicenceRest}}</span>
+    <span>{{common.privacy}}</span>
+    <a href="{{common.siteHref}}">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">{{common.code}}</a>
+  </div>
+</footer>
+<script type="module" src="{{root}}src/home.ts"></script>
+</body>
+</html>

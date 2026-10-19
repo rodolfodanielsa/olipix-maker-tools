@@ -11,7 +11,7 @@ Ferramentas gratuitas para quem imprime em 3D. Páginas estáticas: tudo corre n
 
 `index.html` é a landing (hero, ferramentas, porquê confiar, intro à Olipix Creative Lab); `tune/` e `price/` são as ferramentas. Tokens e estilos em `src/style.css`. Fontes (Cal Sans e Hanken Grotesk, ambas OFL) e logo estão em `public/`, auto-alojadas: a página não faz pedidos a terceiros. `tune/?demo=1` abre com um projeto de exemplo (`public/sample.3mf`).
 
-**Contador de utilizações:** GoatCounter (`olipix-tools.goatcounter.com`), chamado direto em `src/counter.ts`, sem o `count.js`. Conta `/use/tune` (depois do download) e `/use/price` (depois de "Copiar"), uma vez por ferramenta por browser (marca `counted.<tool>` em `localStorage`). Mostra "N pessoas já usaram" só a partir de 10. Ver Privacidade.
+**Contador de utilizações:** GoatCounter (`olipix-tools.goatcounter.com`), chamado direto em `src/counter.ts`, sem o `count.js`. Conta `/use/tune` (depois do download) e `/use/price` (quando aparece o primeiro preço calculado, fora do `?demo=1`), uma vez por ferramenta por browser (marca `counted.<tool>` em `localStorage`). Mostra "N pessoas já usaram" só a partir de 10. Ver Privacidade.
 
 ## Idiomas
 

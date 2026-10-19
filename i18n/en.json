@@ -46,7 +46,7 @@
     "home.trustH2": "Why you can trust them",
     "home.trustLead": "Every promise comes with a way to check it.",
     "home.proof1h": "Your file never leaves your computer",
-    "home.proof1p": "Everything is calculated in the browser. Open the Network tab in your developer tools: there are no requests carrying your project. The only text that leaves is the prompt you copy, and you read it first. When you finish, you'll see one request to GoatCounter with just the tool's name: that's the counter.",
+    "home.proof1p": "Everything is calculated in the browser. Open the Network tab in your developer tools: there are no requests carrying your project. The only text that leaves is the prompt you copy, and you read it first. Once you download the file or see a first price, you'll see one request to GoatCounter with just the tool's name: that's the counter.",
     "home.proof2h": "Open source, MIT licence",
     "home.proof2p": "You can read, copy and adapt it. <a href=\"https://github.com/rodolfodanielsa/olipix-maker-tools\">See the code on GitHub</a>.",
     "home.proof3h": "Tested, and the AI's answer is never accepted blindly",

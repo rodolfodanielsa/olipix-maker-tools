@@ -18,8 +18,6 @@ function syncPrinter(): void {
   if (match && match.watts !== num('powerW')) printer().value = OTHER_PRINTER;
 }
 
-const demo = new URLSearchParams(location.search).has('demo');
-
 const radio = (name: string): string => document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value ?? '';
 
 function num(id: string): number {
@@ -83,7 +81,7 @@ function shareText(r: PriceResult, name: string, audience: string): string {
   return out.join('\n');
 }
 
-function render(): void {
+function render(): boolean {
   const r = calculate(read());
   const lines = $('lines');
   lines.replaceChildren();
@@ -92,14 +90,14 @@ function render(): void {
   if (r === null) {
     $('price').textContent = '—';
     $('price-sub').textContent = t('price.empty');
-    return;
+    return false;
   }
   $('price').textContent = eur.format(r.withVat);
-  if (!demo) countUse('price');
   const vat = r.vatPercent > 0 ? t('price.inclVat') : t('price.exclVat');
   $('price-sub').textContent = r.pieces > 1 ? t('price.summary', { n: r.pieces, total: eur.format(r.totalWithVat), vat }) : vat;
   for (const [k, v, strong] of breakdown(r)) lines.append(...line(k, v, strong));
   $<HTMLTextAreaElement>('share-text').value = shareText(r, input('name').value, radio('audience'));
+  return true;
 }
 
 function applyMode(): void {
@@ -154,7 +152,7 @@ async function copy(): Promise<void> {
 
 for (const p of PRINTERS) printer().add(new Option(`${p.name} · ${p.watts} W`, p.id), printer().options.length - 1);
 restore();
-if (demo) {
+if (new URLSearchParams(location.search).has('demo')) {
   input('name').value = t('price.demoName');
   input('grams').value = '38';
   input('hours').value = '2';
@@ -173,7 +171,7 @@ $('form').addEventListener('input', (e) => {
   }
   applyMode();
   save();
-  render();
+  if (render()) countUse('price');
 });
 document.querySelectorAll('input[name="mode"], input[name="audience"]').forEach((r) =>
   r.addEventListener('change', () => {

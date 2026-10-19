@@ -4,20 +4,146 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Olipix Maker Tools</title>
-  <meta name="description" content="Ferramentas gratuitas para makers de impressão 3D. Correm no browser, sem conta e sem enviar ficheiros.">
+  <meta name="description" content="Ferramentas gratuitas para quem imprime em 3D, da Olipix Creative Lab. Correm no teu browser: sem conta e sem enviar ficheiros.">
+  <meta name="theme-color" content="#2c4a3e">
+  <link rel="icon" href="./logo.svg" type="image/svg+xml">
+  <link rel="preload" href="./fonts/cal-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
-<main>
-  <h1>Olipix Maker Tools</h1>
-  <p class="lead">Ferramentas gratuitas para quem imprime em 3D. Tudo corre no teu browser: sem conta, sem servidor, os ficheiros nunca saem do teu computador.</p>
-  <div class="cards">
-    <a class="panel card" href="./tune/">
-      <strong>Ajustar 3MF</strong>
-      <span>Copia um prompt para a tua AI, cola a resposta e descarrega o projeto do Bambu Studio com as definições afinadas.</span>
-    </a>
+<a class="skip" href="#ferramentas">Saltar para as ferramentas</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="./logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="Principal">
+      <a href="#ferramentas">Ferramentas</a>
+      <a href="#confianca">Porquê confiar</a>
+      <a href="#sobre">Sobre</a>
+      <a href="https://olipix-lab.vercel.app">O nosso site</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Código</a>
+      <button class="theme" id="theme" type="button" aria-label="Mudar entre tema claro e escuro">Tema</button>
+    </nav>
   </div>
-  <footer>Código aberto. Sem recolha de dados.</footer>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Ferramentas de bancada para quem imprime em 3D</h1>
+        <p class="lead">Gratuitas, abertas e a correr no teu browser. Os teus ficheiros ficam no teu computador.</p>
+        <div class="row">
+          <a class="btn primary" href="./tune/">Abrir o Ajustar 3MF</a>
+          <a class="btn ghost" href="./tune/?demo=1">Experimentar com um projeto de exemplo</a>
+        </div>
+      </div>
+      <figure class="diff" style="margin:0" aria-label="Exemplo do que o Ajustar 3MF devolve">
+        <svg class="ruler" id="ruler-h" aria-hidden="true"></svg>
+        <svg class="ruler v" id="ruler-v" aria-hidden="true"></svg>
+        <p class="file">Exemplo: vaso-decorativo-ajustado.3mf</p>
+        <ul>
+          <li>
+            <span class="k">Altura de camada (mm)</span>
+            <span class="v"><span class="from">0.2</span><span class="arrow">→</span><span class="to">0.16</span></span>
+            <span class="why">Mais detalhe nas curvas</span>
+          </li>
+          <li>
+            <span class="k">Enchimento</span>
+            <span class="v"><span class="from">15%</span><span class="arrow">→</span><span class="to">10%</span></span>
+            <span class="why">Peça decorativa: poupa material</span>
+          </li>
+          <li>
+            <span class="k">Temperatura do bico (°C)</span>
+            <span class="v"><span class="from">220</span><span class="arrow">→</span><span class="to">215</span></span>
+            <span class="why">Menos fios nas zonas finas</span>
+          </li>
+        </ul>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="ferramentas">
+    <div class="wrap">
+      <h2>Na bancada</h2>
+      <p class="lead">Uma ferramenta pronta, mais duas a caminho.</p>
+      <div class="tools">
+        <article class="tool-main">
+          <h3>Ajustar 3MF</h3>
+          <p>Abres o projeto do Bambu Studio, copias um prompt para a AI que preferires e colas a resposta. Recebes o mesmo projeto com as definições afinadas para aquela peça.</p>
+          <ul>
+            <li>Só mexe numa lista fechada de definições, com intervalos seguros.</li>
+            <li>Mostra cada alteração com o motivo; desmarcas o que não queres.</li>
+            <li>Marca as definições mudadas como editadas no Bambu Studio.</li>
+          </ul>
+          <a class="btn primary" href="./tune/">Abrir o Ajustar 3MF</a>
+          <span class="uses" data-uses="tune" hidden></span>
+          <p class="facts">Grátis · Sem conta · Projetos sem fatiar</p>
+        </article>
+        <div class="drawers">
+          <div class="drawer">
+            <h3>Calculadora de preço</h3>
+            <p>Filamento, energia, hora de máquina, falhas e taxas, até ao preço final. <span class="soon">Em breve</span></p>
+          </div>
+          <div class="drawer">
+            <h3>Etiquetas de bobine</h3>
+            <p>QR e etiquetas para a fita de 15 mm. <span class="soon">Em breve</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="confianca">
+    <div class="wrap">
+      <h2>Porque podes confiar</h2>
+      <p class="lead">Cada promessa vem com a forma de a verificares.</p>
+      <div class="proofs">
+        <div class="proof">
+          <h3>O ficheiro não sai do teu computador</h3>
+          <p>Tudo é calculado no browser. Abre o separador Rede das ferramentas do programador: não há pedidos com o teu projeto. O único texto que sai é o prompt que tu copias, e lês antes.</p>
+        </div>
+        <div class="proof">
+          <h3>Código aberto, licença MIT</h3>
+          <p>Podes ler, copiar e adaptar. <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Ver o código no GitHub</a>.</p>
+        </div>
+        <div class="proof">
+          <h3>Testado, e a resposta da AI nunca é aceite às cegas</h3>
+          <p>Cada alteração é validada contra o teu ficheiro: chaves desconhecidas, valores fora do intervalo e torres de purga desligadas em projetos a cores são recusadas. <a href="https://github.com/rodolfodanielsa/olipix-maker-tools/actions">Ver os testes automáticos</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mat" id="sobre">
+    <div class="wrap about">
+      <div>
+        <h2>Feitas na oficina da Olipix Creative Lab</h2>
+        <p>A Olipix Creative Lab é um estúdio independente: desenhamos e imprimimos peças decorativas, e gostamos de um desafio. Quanto mais difícil o encaixe ou a forma, mais queremos experimentar.</p>
+        <p>Estas ferramentas nasceram da própria oficina. Usamo-las para preparar projetos, orçamentar e imprimir as nossas peças, e decidimos partilhá-las: quem imprime em 3D perde horas nos mesmos problemas, e uma ferramenta que já resolve um deles não devia ficar numa gaveta.</p>
+        <p>Vamos acrescentando as que forem passando o teste do uso diário.</p>
+        <ul class="links">
+          <li><a href="https://olipix-lab.vercel.app"><img src="./logo.svg" alt="" width="28" height="28">Site da Olipix Lab</a></li>
+          <li><a href="https://makerworld.com/en/@olipix.lab/upload"><img src="./makerworld.svg" alt="" width="28" height="28">MakerWorld</a></li>
+          <li><a href="https://instagram.com/olipix.lab"><img src="./instagram.svg" alt="" width="28" height="28">Instagram</a></li>
+        </ul>
+      </div>
+      <figure style="margin:0">
+        <img class="photo" src="./studio.webp" alt="A bancada da oficina: impressoras 3D, prateleiras de bobines de filamento e gavetas." width="1600" height="1200" loading="lazy">
+        <figcaption class="caption">A bancada onde estas ferramentas são usadas.</figcaption>
+      </figure>
+    </div>
+  </section>
 </main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Licença MIT, só para o código. O nome e o logo Olipix não estão incluídos.</span>
+    <span>Sem cookies nem analytics.</span>
+    <a href="https://olipix-lab.vercel.app">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Código</a>
+  </div>
+</footer>
+<script type="module" src="./src/home.ts"></script>
 </body>
 </html>

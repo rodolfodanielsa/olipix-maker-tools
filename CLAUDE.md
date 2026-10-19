@@ -8,6 +8,9 @@ Repo **público** (GitHub Pages) com ferramentas estáticas para makers, extraí
 - Tudo corre no browser. Sem `fetch` para terceiros, sem analytics.
 - Português de Portugal nos textos da UI.
 
+## Site
+Conceito "a bancada": cinza-esverdeado frio + verde tapete de corte, pêssego da marca só como sinal sobre o escuro. Evitar voltar ao creme/terracota (já é o `olipix-lab-site`). Fontes locais (nada de Google Fonts: contradiz a promessa de privacidade). Só afirmar o que se verifica; "Em breve" só para o roadmap real. Contador adiado: ver `src/counter.ts`.
+
 ## Ajustar 3MF (`src/tune/`)
 Porte de `home-deck/backend/src/Workshop/Service/ProjectTuner.php` e `ProjectTuneAdvisor.php` (doc: `home-deck/docs/fase10-workshop.md`, secção "Ajustar 3MF com o Claude"). Em vez de `claude -p`, o utilizador copia o prompt e cola a resposta. **Ao mudar o `ProjectTuner` no home-deck, repetir aqui** (e vice-versa): `spec.ts` = `PROCESS`/`FILAMENT`/`BED_KEYS`, `tuner.ts` = read/validate/apply, `prompt.ts` = SYSTEM + payload.
 

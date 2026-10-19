@@ -5,16 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ajustar 3MF — Olipix Maker Tools</title>
   <meta name="description" content="Afina as definições de um projeto do Bambu Studio com a ajuda da tua AI, sem enviar o ficheiro.">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="../src/style.css">
 </head>
 <body>
-<main>
-  <p><a href="../">← Ferramentas</a></p>
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../logo.svg" alt="" width="34" height="34">Olipix Creative Lab</a>
+    <nav aria-label="Principal">
+      <a href="../#ferramentas">Ferramentas</a>
+      <a href="../#sobre">Sobre</a>
+      <a href="https://olipix-lab.vercel.app">O nosso site</a>
+      <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Código</a>
+      <button class="theme" id="theme" type="button" aria-label="Mudar entre tema claro e escuro">Tema</button>
+    </nav>
+  </div>
+</header>
+
+<main class="tool" id="conteudo">
   <h1>Ajustar 3MF</h1>
-  <p class="lead">Abre um projeto do Bambu Studio (sem fatiar), copia o prompt para a AI que preferires, cola a resposta e descarrega o <code>-ajustado.3mf</code>. O ficheiro nunca sai do browser; só o texto do prompt, que podes ler antes de copiar.</p>
+  <p class="lead">Abre um projeto do Bambu Studio (sem fatiar), copia o prompt para a AI que preferires, cola a resposta e descarrega o <code>-ajustado.3mf</code>. O ficheiro nunca sai do browser; só sai o texto do prompt, que podes ler antes de copiar.</p>
+  <p><a href="?demo=1">Experimentar com um projeto de exemplo</a></p>
 
   <section class="panel" id="s-file">
-    <div class="step">1 · Projeto</div>
+    <div class="step">1. Projeto</div>
     <div class="drop" id="drop" tabindex="0" role="button" aria-label="Escolher ficheiro 3MF">
       Arrasta aqui o <strong>.3mf</strong> ou clica para escolher
     </div>
@@ -24,7 +40,7 @@
   </section>
 
   <section class="panel" id="s-ctx" hidden>
-    <div class="step">2 · Contexto</div>
+    <div class="step">2. Contexto</div>
     <div class="grid">
       <label>Uso da peça <select id="use"></select></label>
       <label>Prioridade <select id="priority"></select></label>
@@ -35,14 +51,14 @@
   </section>
 
   <section class="panel" id="s-prompt" hidden>
-    <div class="step">3 · Prompt</div>
+    <div class="step">3. Prompt</div>
     <p>Copia isto para o ChatGPT, Claude, Gemini ou um modelo local. Revê o texto: é tudo o que vai ser enviado.</p>
     <textarea id="prompt" readonly rows="10"></textarea>
     <div class="row"><button class="primary" id="copy">Copiar prompt</button><span id="copy-msg" role="status"></span></div>
   </section>
 
   <section class="panel" id="s-reply" hidden>
-    <div class="step">4 · Resposta</div>
+    <div class="step">4. Resposta</div>
     <p>Cola aqui a resposta da AI (o JSON).</p>
     <textarea id="reply" rows="6" placeholder='{"note":"…","changes":[…]}'></textarea>
     <div class="row"><button class="primary" id="check">Validar resposta</button></div>
@@ -50,7 +66,7 @@
   </section>
 
   <section class="panel" id="s-result" hidden>
-    <div class="step">5 · Alterações</div>
+    <div class="step">5. Alterações</div>
     <div id="note"></div>
     <div id="changes"></div>
     <div id="rejected"></div>
@@ -59,6 +75,14 @@
     <p class="lead" style="margin-top:12px">Abre o ficheiro no Bambu Studio: as definições alteradas aparecem marcadas como editadas. Fatia lá.</p>
   </section>
 </main>
+<footer class="foot">
+  <div class="wrap">
+    <span>Licença MIT, só para o código.</span>
+    <span>Sem cookies nem analytics.</span>
+    <a href="https://olipix-lab.vercel.app">olipix-lab.vercel.app</a>
+    <a href="https://github.com/rodolfodanielsa/olipix-maker-tools">Código</a>
+  </div>
+</footer>
 <script type="module" src="../src/tune/main.ts"></script>
 </body>
 </html>

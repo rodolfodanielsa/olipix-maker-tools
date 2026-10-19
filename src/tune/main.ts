@@ -1,4 +1,6 @@
 import { buildPrompt, parseReply, PRIORITIES, USES, type Choices } from './prompt';
+import { countUse } from '../counter';
+import { initTheme } from '../theme';
 import { apply, load, TuneError, validate, type Change, type Loaded } from './tuner';
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
@@ -171,6 +173,7 @@ async function download(): Promise<void> {
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 10_000);
     msg.textContent = 'Feito.';
+    countUse('tune');
   } catch (e) {
     msg.textContent = e instanceof Error ? e.message : 'Falhou.';
   }
@@ -218,3 +221,12 @@ input.addEventListener('change', () => {
 $('copy').addEventListener('click', () => void copy());
 $('check').addEventListener('click', check);
 $('download').addEventListener('click', () => void download());
+
+initTheme(document.getElementById('theme'));
+
+if (new URLSearchParams(location.search).get('demo') === '1') {
+  fetch(new URL('../sample.3mf', location.href))
+    .then((r) => r.blob())
+    .then((b) => open(new File([b], 'vaso-decorativo.3mf')))
+    .catch(() => $('file-msg').replaceChildren(notice('error', 'Não foi possível carregar o projeto de exemplo.')));
+}

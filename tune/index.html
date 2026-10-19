@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajustar 3MF — Olipix Maker Tools</title>
+  <meta name="description" content="Afina as definições de um projeto do Bambu Studio com a ajuda da tua AI, sem enviar o ficheiro.">
+  <link rel="stylesheet" href="../src/style.css">
+</head>
+<body>
+<main>
+  <p><a href="../">← Ferramentas</a></p>
+  <h1>Ajustar 3MF</h1>
+  <p class="lead">Abre um projeto do Bambu Studio (sem fatiar), copia o prompt para a AI que preferires, cola a resposta e descarrega o <code>-ajustado.3mf</code>. O ficheiro nunca sai do browser; só o texto do prompt, que podes ler antes de copiar.</p>
+
+  <section class="panel" id="s-file">
+    <div class="step">1 · Projeto</div>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Escolher ficheiro 3MF">
+      Arrasta aqui o <strong>.3mf</strong> ou clica para escolher
+    </div>
+    <input type="file" id="file" accept=".3mf" hidden>
+    <div id="file-msg" role="status"></div>
+    <div id="summary" hidden></div>
+  </section>
+
+  <section class="panel" id="s-ctx" hidden>
+    <div class="step">2 · Contexto</div>
+    <div class="grid">
+      <label>Uso da peça <select id="use"></select></label>
+      <label>Prioridade <select id="priority"></select></label>
+      <label>Impressora onde vais imprimir (opcional) <input id="printing-on" maxlength="80" placeholder="ex.: Bambu Lab P1S"></label>
+    </div>
+    <div class="grid" id="spools" style="margin-top:12px"></div>
+    <label style="margin-top:12px">Observações (opcional) <textarea id="notes" maxlength="500" rows="3" style="min-height:70px;font-family:inherit;font-size:1rem" placeholder="ex.: tem de encaixar noutra peça com folga de 0,2 mm"></textarea></label>
+  </section>
+
+  <section class="panel" id="s-prompt" hidden>
+    <div class="step">3 · Prompt</div>
+    <p>Copia isto para o ChatGPT, Claude, Gemini ou um modelo local. Revê o texto: é tudo o que vai ser enviado.</p>
+    <textarea id="prompt" readonly rows="10"></textarea>
+    <div class="row"><button class="primary" id="copy">Copiar prompt</button><span id="copy-msg" role="status"></span></div>
+  </section>
+
+  <section class="panel" id="s-reply" hidden>
+    <div class="step">4 · Resposta</div>
+    <p>Cola aqui a resposta da AI (o JSON).</p>
+    <textarea id="reply" rows="6" placeholder='{"note":"…","changes":[…]}'></textarea>
+    <div class="row"><button class="primary" id="check">Validar resposta</button></div>
+    <div id="reply-msg" role="status"></div>
+  </section>
+
+  <section class="panel" id="s-result" hidden>
+    <div class="step">5 · Alterações</div>
+    <div id="note"></div>
+    <div id="changes"></div>
+    <div id="rejected"></div>
+    <div id="overrides"></div>
+    <div class="row"><button class="primary" id="download">Descarregar -ajustado.3mf</button><span id="dl-msg" role="status"></span></div>
+    <p class="lead" style="margin-top:12px">Abre o ficheiro no Bambu Studio: as definições alteradas aparecem marcadas como editadas. Fatia lá.</p>
+  </section>
+</main>
+<script type="module" src="../src/tune/main.ts"></script>
+</body>
+</html>

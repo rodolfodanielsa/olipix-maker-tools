@@ -46,8 +46,10 @@
         <div class="grid">
           <label data-pro>{{price.name}} <input id="name" maxlength="80" placeholder="{{price.namePh}}"></label>
           <label>{{price.grams}} <input id="grams" type="number" inputmode="decimal" min="0" step="any"></label>
-          <label>{{price.hours}} <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
-          <label>{{price.minutes}} <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          <div class="duration" role="group" aria-label="{{price.time}}">
+            <label>{{price.hours}} <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
+            <label>{{price.minutes}} <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          </div>
           <label data-pro>{{price.pieces}} <input id="pieces" type="number" inputmode="numeric" min="1" step="1" value="1"></label>
         </div>
         <p class="hint">{{price.pieceHint}}</p>
@@ -57,6 +59,9 @@
         <div class="step">{{price.costsH}}</div>
         <div class="grid">
           <label>{{price.perKg}} <input id="filamentPerKg" type="number" inputmode="decimal" min="0" step="any" value="20"></label>
+          <label>{{price.printer}}
+            <select id="printer"><option value="">{{price.printerPick}}</option><option value="other">{{price.printerOther}}</option></select>
+          </label>
           <label>{{price.power}} <input id="powerW" type="number" inputmode="decimal" min="0" step="any" value="120"></label>
           <label>{{price.kwh}} <input id="kwh" type="number" inputmode="decimal" min="0" step="any" value="0.2"></label>
           <label data-pro>{{price.machine}} <input id="machinePerHour" type="number" inputmode="decimal" min="0" step="any" value="1"></label>

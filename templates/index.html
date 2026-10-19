@@ -84,13 +84,18 @@
           <span class="uses" data-uses="tune" hidden></span>
           <p class="facts">{{home.tuneFacts}}</p>
         </article>
-        <div class="drawers">
-          <a class="drawer ready" href="{{home}}price/">
-            <h3>{{home.priceH3}}</h3>
-            <p>{{home.priceP}}</p>
-            <span class="uses" data-uses="price" hidden></span>
-          </a>
-        </div>
+        <article class="tool-main">
+          <h3>{{home.priceH3}}</h3>
+          <p>{{home.priceP}}</p>
+          <ul>
+            <li>{{home.priceLi1}}</li>
+            <li>{{home.priceLi2}}</li>
+            <li>{{home.priceLi3}}</li>
+          </ul>
+          <a class="btn primary" href="{{home}}price/">{{home.openPrice}}</a>
+          <span class="uses" data-uses="price" hidden></span>
+          <p class="facts">{{home.priceFacts}}</p>
+        </article>
       </div>
     </div>
   </section>

@@ -46,8 +46,10 @@
         <div class="grid">
           <label data-pro>Nome (opcional) <input id="name" maxlength="80" placeholder="ex.: Vaso pequeno"></label>
           <label>Peso do filamento (g) <input id="grams" type="number" inputmode="decimal" min="0" step="any"></label>
-          <label>Tempo de impressão (horas) <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
-          <label>Tempo de impressão (minutos) <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          <div class="duration" role="group" aria-label="Tempo de impressão">
+            <label>Horas <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
+            <label>Minutos <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          </div>
           <label data-pro>Peças iguais na mesa <input id="pieces" type="number" inputmode="numeric" min="1" step="1" value="1"></label>
         </div>
         <p class="hint">Peso e tempo da mesa inteira, como o fatiador os mostra. Com várias peças, o preço é dividido por elas.</p>
@@ -57,13 +59,16 @@
         <div class="step">Os teus custos</div>
         <div class="grid">
           <label>Preço do filamento (€/kg) <input id="filamentPerKg" type="number" inputmode="decimal" min="0" step="any" value="20"></label>
+          <label>Impressora
+            <select id="printer"><option value="">Escolher impressora…</option><option value="other">Outra (indico os W)</option></select>
+          </label>
           <label>Consumo da impressora (W) <input id="powerW" type="number" inputmode="decimal" min="0" step="any" value="120"></label>
           <label>Preço da energia (€/kWh) <input id="kwh" type="number" inputmode="decimal" min="0" step="any" value="0.2"></label>
           <label data-pro>Desgaste da máquina (€/hora) <input id="machinePerHour" type="number" inputmode="decimal" min="0" step="any" value="1"></label>
           <label data-pro>Preparação da mesa (€) <input id="setup" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
           <label data-pro>Margem para falhas (%) <input id="failurePercent" type="number" inputmode="decimal" min="0" step="any" value="5"></label>
         </div>
-        <p class="hint">Os valores iniciais são só um ponto de partida: troca-os pelos teus. O consumo vê-se na ficha da impressora ou com uma tomada medidora; a energia está na fatura da luz.</p>
+        <p class="hint">Os valores iniciais são só um ponto de partida: troca-os pelos teus. Os consumos da lista são as médias que a Bambu Lab e a Prusa publicam a imprimir PLA; com outros materiais ou numa divisão fria gasta mais. Uma tomada medidora dá o valor real; a energia está na fatura da luz.</p>
       </section>
 
       <section class="panel">

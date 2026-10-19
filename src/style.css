@@ -161,22 +161,13 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .section > .wrap > .lead { color: var(--muted); margin-bottom: 32px; }
 
 .tools { display: grid; gap: 20px; }
-@media (min-width: 900px) { .tools { grid-template-columns: 1.6fr 1fr; align-items: start; } }
+@media (min-width: 900px) { .tools { grid-template-columns: 1fr 1fr; } }
 .tool-main { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 28px; }
 .tool-main h3 { font-size: 1.7rem; margin-bottom: 10px; }
 .tool-main ul { margin: 0 0 18px; padding-left: 1.1em; color: var(--muted); }
 .tool-main .facts { color: var(--muted); font-size: 0.95rem; margin: 14px 0 0; }
 .uses { display: block; margin-top: 10px; font-weight: 600; color: var(--ok); }
 .uses[hidden] { display: none; }
-.drawers { display: grid; gap: 14px; }
-.drawer { border: 2px dashed var(--line); border-radius: 12px; padding: 18px 20px; color: var(--muted); }
-.drawer:nth-child(2) { padding: 14px 20px; }
-.drawer h3 { color: var(--ink); font-size: 1.05rem; margin-bottom: 4px; }
-.drawer p { margin: 0; font-size: 0.95rem; }
-.drawer.ready { display: block; border-style: solid; background: var(--surface); text-decoration: none; color: var(--ink); }
-.drawer.ready:hover { border-color: var(--ink); }
-.drawer.ready p { color: var(--muted); }
-.soon { font-weight: 600; color: var(--peach-deep); }
 
 .proofs { display: grid; gap: 28px; }
 .proof { display: grid; gap: 4px 32px; padding-top: 20px; border-top: 1px solid var(--line); }
@@ -237,6 +228,7 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .arrow { color: var(--muted); padding: 0 4px; }
 
 /* price calculator */
+.duration { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 main.tool.wide { max-width: 1080px; }
 .hint { color: var(--muted); font-size: 0.9rem; margin: 12px 0 0; }
 input[type='radio'] { width: auto; margin: 0 6px 0 0; accent-color: var(--peach-deep); }

@@ -46,8 +46,10 @@
         <div class="grid">
           <label data-pro>Name (optional) <input id="name" maxlength="80" placeholder="e.g. Small vase"></label>
           <label>Filament weight (g) <input id="grams" type="number" inputmode="decimal" min="0" step="any"></label>
-          <label>Print time (hours) <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
-          <label>Print time (minutes) <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          <div class="duration" role="group" aria-label="Print time">
+            <label>Hours <input id="hours" type="number" inputmode="numeric" min="0" step="1"></label>
+            <label>Minutes <input id="minutes" type="number" inputmode="numeric" min="0" max="59" step="1"></label>
+          </div>
           <label data-pro>Identical pieces on the plate <input id="pieces" type="number" inputmode="numeric" min="1" step="1" value="1"></label>
         </div>
         <p class="hint">Weight and time for the whole plate, as the slicer shows them. With several pieces, the price is split between them.</p>
@@ -57,13 +59,16 @@
         <div class="step">Your costs</div>
         <div class="grid">
           <label>Filament price (€/kg) <input id="filamentPerKg" type="number" inputmode="decimal" min="0" step="any" value="20"></label>
+          <label>Printer
+            <select id="printer"><option value="">Pick a printer…</option><option value="other">Other (I enter the W)</option></select>
+          </label>
           <label>Printer power draw (W) <input id="powerW" type="number" inputmode="decimal" min="0" step="any" value="120"></label>
           <label>Energy price (€/kWh) <input id="kwh" type="number" inputmode="decimal" min="0" step="any" value="0.2"></label>
           <label data-pro>Machine wear (€/hour) <input id="machinePerHour" type="number" inputmode="decimal" min="0" step="any" value="1"></label>
           <label data-pro>Plate preparation (€) <input id="setup" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
           <label data-pro>Allowance for failures (%) <input id="failurePercent" type="number" inputmode="decimal" min="0" step="any" value="5"></label>
         </div>
-        <p class="hint">The starting values are just a starting point: replace them with your own. Power draw is on the printer's spec sheet or measurable with a power meter plug; the energy price is on your electricity bill.</p>
+        <p class="hint">The starting values are just a starting point: replace them with your own. The draws in the list are the averages Bambu Lab and Prusa publish while printing PLA; other materials or a cold room use more. A power meter plug gives the real value; the energy price is on your electricity bill.</p>
       </section>
 
       <section class="panel">

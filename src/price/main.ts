@@ -1,6 +1,7 @@
 import { countUse, showUses } from '../counter';
 import { locale, t } from '../i18n';
 import { initTheme } from '../theme';
+import { OTHER_PRINTER, PRINTERS } from './printers';
 import { calculate, type PriceInput, type PriceResult, type Rounding } from './calc';
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
@@ -9,6 +10,13 @@ const eur = new Intl.NumberFormat(locale(), { style: 'currency', currency: 'EUR'
 
 const SAVED = ['filamentPerKg', 'powerW', 'kwh', 'machinePerHour', 'failurePercent', 'marginPercent', 'vatPercent'] as const;
 const STORE = 'price.settings';
+
+const printer = () => $<HTMLSelectElement>('printer');
+
+function syncPrinter(): void {
+  const match = PRINTERS.find((p) => p.id === printer().value);
+  if (match && match.watts !== num('powerW')) printer().value = OTHER_PRINTER;
+}
 
 const radio = (name: string): string => document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value ?? '';
 
@@ -101,7 +109,7 @@ function applyMode(): void {
 
 function save(): void {
   try {
-    const data: Record<string, string> = { mode: radio('mode'), rounding: $<HTMLSelectElement>('rounding').value };
+    const data: Record<string, string> = { mode: radio('mode'), rounding: $<HTMLSelectElement>('rounding').value, printer: printer().value };
     for (const id of SAVED) data[id] = input(id).value;
     localStorage.setItem(STORE, JSON.stringify(data));
   } catch {
@@ -114,6 +122,7 @@ function restore(): void {
     const data = JSON.parse(localStorage.getItem(STORE) ?? '{}') as Record<string, string>;
     for (const id of SAVED) if (typeof data[id] === 'string') input(id).value = data[id];
     if (data.rounding) $<HTMLSelectElement>('rounding').value = data.rounding;
+    if (data.printer && [...printer().options].some((o) => o.value === data.printer)) printer().value = data.printer;
     const mode = document.querySelector<HTMLInputElement>(`input[name="mode"][value="${data.mode}"]`);
     if (mode) mode.checked = true;
   } catch {
@@ -141,6 +150,7 @@ async function copy(): Promise<void> {
   }
 }
 
+for (const p of PRINTERS) printer().add(new Option(`${p.name} · ${p.watts} W`, p.id), printer().options.length - 1);
 restore();
 if (new URLSearchParams(location.search).has('demo')) {
   input('name').value = t('price.demoName');
@@ -151,7 +161,14 @@ if (new URLSearchParams(location.search).has('demo')) {
 applyMode();
 render();
 
-$('form').addEventListener('input', () => {
+$('form').addEventListener('input', (e) => {
+  const target = e.target as HTMLElement;
+  if (target.id === 'printer') {
+    const chosen = PRINTERS.find((p) => p.id === printer().value);
+    if (chosen) input('powerW').value = String(chosen.watts);
+  } else if (target.id === 'powerW') {
+    syncPrinter();
+  }
   applyMode();
   save();
   render();

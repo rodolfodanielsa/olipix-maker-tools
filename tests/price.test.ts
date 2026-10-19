@@ -76,3 +76,14 @@ describe('calculate', () => {
     expect(r.vatPercent).toBe(0);
   });
 });
+
+describe('printers', () => {
+  it('have unique ids, names and a sane power draw', async () => {
+    const { PRINTERS } = await import('../src/price/printers');
+    expect(new Set(PRINTERS.map((p) => p.id)).size).toBe(PRINTERS.length);
+    for (const p of PRINTERS) {
+      expect(p.name).not.toBe('');
+      expect(Number.isFinite(p.watts) && p.watts > 0 && p.watts < 1000).toBe(true);
+    }
+  });
+});

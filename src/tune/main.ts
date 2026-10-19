@@ -1,4 +1,4 @@
-import { countUse } from '../counter';
+import { countUse, showUses } from '../counter';
 import { t } from '../i18n';
 import { buildPrompt, parseReply, priorities, uses, type Choices } from './prompt';
 import { initTheme } from '../theme';
@@ -224,6 +224,7 @@ $('check').addEventListener('click', check);
 $('download').addEventListener('click', () => void download());
 
 initTheme(document.getElementById('theme'));
+void showUses();
 
 if (new URLSearchParams(location.search).get('demo') === '1') {
   fetch(new URL(`${document.documentElement.dataset.root ?? '../'}sample.3mf`, location.href))

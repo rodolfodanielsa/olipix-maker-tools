@@ -5,11 +5,11 @@ Repo **público** (GitHub Pages) com ferramentas estáticas para makers, extraí
 ## Regras
 - **Nada de dados pessoais, segredos, hostnames ou IPs** neste repo, nem em testes ou fixtures. Os 3MF de teste são gerados em código (`tests/tune.test.ts`).
 - Só lógica pura portada do home-deck; nunca copiar dados de clientes, preços reais nem configuração.
-- Tudo corre no browser. Sem `fetch` para terceiros, sem analytics.
+- Tudo corre no browser. O único `fetch` para terceiros é o contador anónimo do GoatCounter (`src/counter.ts`): nunca lhe juntar dados do projeto, nem passar a usar o `count.js`. Ao mudar o que se guarda (ali ou nas Settings do GoatCounter), mudar `common.privacy` e `home.proof1p` na mesma alteração.
 - Português de Portugal nos textos da UI.
 
 ## Site
-Conceito "a bancada": cinza-esverdeado frio + verde tapete de corte, pêssego da marca só como sinal sobre o escuro. Evitar voltar ao creme/terracota (já é o `olipix-lab-site`). Fontes locais (nada de Google Fonts: contradiz a promessa de privacidade). Só afirmar o que se verifica; "Em breve" só para o roadmap real. Contador adiado: ver `src/counter.ts`.
+Conceito "a bancada": cinza-esverdeado frio + verde tapete de corte, pêssego da marca só como sinal sobre o escuro. Evitar voltar ao creme/terracota (já é o `olipix-lab-site`). Fontes locais (nada de Google Fonts: contradiz a promessa de privacidade). Só afirmar o que se verifica; "Em breve" só para o roadmap real. Contador: GoatCounter, ver README ("Privacidade").
 
 ## Ajustar 3MF (`src/tune/`)
 Porte de `home-deck/backend/src/Workshop/Service/ProjectTuner.php` e `ProjectTuneAdvisor.php` (doc: `home-deck/docs/fase10-workshop.md`, secção "Ajustar 3MF com o Claude"). Em vez de `claude -p`, o utilizador copia o prompt e cola a resposta. **Ao mudar o `ProjectTuner` no home-deck, repetir aqui** (e vice-versa): `spec.ts` = `PROCESS`/`FILAMENT`/`BED_KEYS`, `tuner.ts` = read/validate/apply, `prompt.ts` = SYSTEM + payload.

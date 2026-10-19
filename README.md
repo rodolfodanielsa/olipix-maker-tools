@@ -11,7 +11,7 @@ Ferramentas gratuitas para quem imprime em 3D. Páginas estáticas: tudo corre n
 
 `index.html` é a landing (hero, ferramentas, porquê confiar, intro à Olipix Creative Lab); `tune/` e `price/` são as ferramentas. Tokens e estilos em `src/style.css`. Fontes (Cal Sans e Hanken Grotesk, ambas OFL) e logo estão em `public/`, auto-alojadas: a página não faz pedidos a terceiros. `tune/?demo=1` abre com um projeto de exemplo (`public/sample.3mf`).
 
-**Contador de utilizações:** desligado (`COUNTER_URL = null` em `src/counter.ts`). Ao ligar um backend, atualizar o "sem cookies nem analytics" em `index.html`, `tune/index.html` e aqui. Só mostra a partir de 10 utilizações.
+**Contador de utilizações:** GoatCounter (`olipix-tools.goatcounter.com`), chamado direto em `src/counter.ts`, sem o `count.js`. Conta `/use/tune` (depois do download) e `/use/price` (depois de "Copiar"), uma vez por ferramenta por browser (marca `counted.<tool>` em `localStorage`). Mostra "N pessoas já usaram" só a partir de 10. Ver Privacidade.
 
 ## Idiomas
 
@@ -30,7 +30,9 @@ Deploy: o workflow `.github/workflows/pages.yml` publica `dist/` no GitHub Pages
 
 ## Privacidade
 
-Nada é enviado por esta página. O único texto que sai é o prompt que copias, e podes lê-lo antes. Não há analytics.
+Sem cookies. O projeto e os custos nunca saem do browser; o único texto que sai é o prompt que copias. Há um pedido ao GoatCounter por ferramenta e por browser, só com o caminho (`/use/<tool>`).
+
+Nas Settings do GoatCounter têm de ficar: **"Allow adding visitor counts on your website" ligado** (o site lê o total) e **tudo em "Data collection" desligado** (referrer, user agent, ecrã, país/região, idioma, sessões). A frase de privacidade (`common.privacy` e `home.proof1p` em `i18n/*.json`) diz exatamente isto: ao mudar o que se guarda, mudar a frase na mesma alteração.
 
 ## Licença
 

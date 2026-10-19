@@ -1,3 +1,4 @@
+import { countUse, showUses } from '../counter';
 import { locale, t } from '../i18n';
 import { initTheme } from '../theme';
 import { calculate, type PriceInput, type PriceResult, type Rounding } from './calc';
@@ -133,6 +134,7 @@ async function copy(): Promise<void> {
   try {
     await navigator.clipboard.writeText(text.value);
     msg.textContent = t('price.copied');
+    countUse('price');
   } catch {
     text.select();
     msg.textContent = t('price.copyManual');
@@ -164,3 +166,4 @@ document.querySelectorAll('input[name="mode"], input[name="audience"]').forEach(
 $('copy').addEventListener('click', () => void copy());
 $('reset').addEventListener('click', reset);
 initTheme($('theme'));
+void showUses();

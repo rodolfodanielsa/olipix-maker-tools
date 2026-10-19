@@ -1,22 +1,36 @@
 import { locale, t } from './i18n';
 
 /**
- * Usage counters are off: there is no backend yet. Set COUNTER_URL to enable them, and
- * update the "sem analytics" copy in index.html and README.md at the same time.
- * Expected response: {"count": number} for GET `${COUNTER_URL}/<tool>`.
+ * Anonymous usage counter on GoatCounter (no cookies), called directly, without its count.js.
+ * The site settings there keep every "Data collection" option off and "Allow adding visitor counts"
+ * on, so only the path and its total are stored. If that changes, update common.privacy and
+ * home.proof1p in i18n/*.json at the same time.
  */
-const COUNTER_URL: string | null = null;
+export const COUNTER_URL: string | null = 'https://olipix-tools.goatcounter.com';
 
 /** Below this a number hurts more than it helps. */
 const MIN_SHOWN = 10;
 
-export async function showUses(): Promise<void> {
-  if (COUNTER_URL === null) return;
+const usePath = (tool: string): string => `/use/${tool}`;
+
+export const countUrl = (base: string, tool: string): string => `${base}/count?p=${encodeURIComponent(usePath(tool))}&rnd=${Date.now()}`;
+
+export const totalUrl = (base: string, tool: string): string => `${base}/counter/${encodeURIComponent(usePath(tool))}.json`;
+
+/** GoatCounter returns the total as display text, e.g. "1,234". */
+export function parseCount(raw: unknown): number {
+  const digits = typeof raw === 'string' ? raw.replace(/\D/g, '') : typeof raw === 'number' ? String(raw) : '';
+  return digits === '' ? 0 : Number(digits);
+}
+
+export async function showUses(base: string | null = COUNTER_URL): Promise<void> {
+  if (base === null) return;
   for (const el of document.querySelectorAll<HTMLElement>('[data-uses]')) {
     try {
-      const res = await fetch(`${COUNTER_URL}/${el.dataset.uses}`);
-      const { count } = (await res.json()) as { count: number };
-      if (Number.isFinite(count) && count >= MIN_SHOWN) {
+      const res = await fetch(totalUrl(base, el.dataset.uses ?? ''));
+      if (!res.ok) continue;
+      const count = parseCount(((await res.json()) as { count?: unknown }).count);
+      if (count >= MIN_SHOWN) {
         el.textContent = t('counter.uses', { n: count.toLocaleString(locale()) });
         el.hidden = false;
       }
@@ -26,8 +40,15 @@ export async function showUses(): Promise<void> {
   }
 }
 
-/** Call once per completed use (the 3MF download). A no-op while COUNTER_URL is null. */
-export function countUse(tool: string): void {
-  if (COUNTER_URL === null) return;
-  void fetch(`${COUNTER_URL}/${tool}`, { method: 'POST', keepalive: true }).catch(() => undefined);
+/** Call once per completed use. Counts each tool once per browser, so the total is people, not clicks. */
+export function countUse(tool: string, base: string | null = COUNTER_URL): void {
+  if (base === null) return;
+  const mark = `counted.${tool}`;
+  try {
+    if (localStorage.getItem(mark)) return;
+    localStorage.setItem(mark, '1');
+  } catch {
+    // storage unavailable: count anyway, at worst more than once for this visitor
+  }
+  void fetch(countUrl(base, tool), { mode: 'no-cors', keepalive: true, credentials: 'omit' }).catch(() => undefined);
 }

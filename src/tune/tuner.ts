@@ -7,6 +7,7 @@ const SETTINGS = 'Metadata/project_settings.config';
 
 type Project = Record<string, unknown>;
 
+export interface Plate { plate: number; name: string | null; objects: string[] }
 export interface Setting { key: string; label: string; value: string; scope: Scope }
 export interface FilamentSlot { slot: number; used: boolean; type: string; color: string | null; profile: string | null }
 export interface Summary {
@@ -16,6 +17,8 @@ export interface Summary {
   savedBy: string | null;
   plates: number;
   objects: string[];
+  /** What each plate prints; empty when the file has no plate layout. */
+  layout: Plate[];
   filaments: FilamentSlot[];
   settings: Setting[];
   overrides: { object: string; keys: string[] }[];
@@ -120,6 +123,7 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
   const objects: string[] = [];
   const overrides: { object: string; keys: string[] }[] = [];
   const used = new Set<number>();
+  const names = new Map<string, string>();
   for (const object of model ? [...model.getElementsByTagName('object')] : []) {
     let name: string | null = null;
     const keys: string[] = [];
@@ -142,6 +146,7 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
     }
     name ??= t('tuner.object', { n: objects.length + 1 });
     objects.push(name);
+    names.set(object.getAttribute('id') ?? '', name);
     if (keys.length) overrides.push({ object: name, keys: [...new Set(keys)] });
   }
 
@@ -168,6 +173,17 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
   }
   const nozzle = single(project.nozzle_diameter);
 
+  const meta = (el: Element, key: string): string | null => children(el, 'metadata').find((m) => m.getAttribute('key') === key)?.getAttribute('value') ?? null;
+  const layout: Plate[] = [];
+  for (const [i, plate] of (model ? [...model.getElementsByTagName('plate')] : []).entries()) {
+    const onPlate = children(plate, 'model_instance')
+      .map((inst) => names.get(meta(inst, 'object_id') ?? ''))
+      .filter((n): n is string => n !== undefined);
+    if (!onPlate.length) continue;
+    const id = parseInt(meta(plate, 'plater_id') ?? '', 10);
+    layout.push({ plate: Number.isFinite(id) ? id : i + 1, name: meta(plate, 'plater_name')?.trim() || null, objects: [...new Set(onPlate)] });
+  }
+
   const summary: Summary = {
     printer: single(project.printer_model),
     nozzle: nozzle !== null && !isNaN(Number(nozzle)) ? Number(nozzle) : null,
@@ -175,6 +191,7 @@ export async function load(data: ArrayBuffer | Uint8Array | Blob): Promise<Loade
     savedBy,
     plates: Math.max(1, model ? model.getElementsByTagName('plate').length : 0),
     objects,
+    layout,
     filaments,
     settings,
     overrides,

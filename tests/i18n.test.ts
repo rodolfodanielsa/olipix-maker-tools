@@ -82,7 +82,7 @@ describe('tune labels', () => {
 describe('English prompt and messages', () => {
   const summary: Summary = {
     printer: 'Bambu Lab X1 Carbon', nozzle: 0.4, bed: 'Textured PEI Plate', savedBy: null, plates: 1,
-    objects: ['Vase'], overrides: [], filaments: [{ slot: 1, type: 'PLA', color: null, profile: null, used: true }],
+    objects: ['Vase'], layout: [], overrides: [], filaments: [{ slot: 1, type: 'PLA', color: null, profile: null, used: true }],
     settings: [{ key: 'layer_height', label: labelOf('layer_height', PROCESS.layer_height!), value: '0.2', scope: 'process' }],
   } as Summary;
   const choices: Choices = { use: 'decorative', priority: 'balanced', notes: '', printingOn: '', spools: {} };

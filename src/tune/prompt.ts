@@ -26,7 +26,7 @@ function compact<T extends Record<string, unknown>>(o: T): Partial<T> {
   return Object.fromEntries(Object.entries(o).filter(([, v]) => present(v))) as Partial<T>;
 }
 
-/** What leaves the page is exactly this JSON: slicer settings, object names, printer and spool names and the typed notes. Never the file. */
+/** What leaves the page is exactly this JSON: slicer settings, object and plate names, printer and spool names and the typed notes. Never the file. */
 export function payload(summary: Summary, c: Choices): Record<string, unknown> {
   const settings = Object.fromEntries(
     summary.settings.map((s) => [s.key, { label: s.label, value: s.value, allowed: allowed(s.key) }]),
@@ -52,8 +52,10 @@ export function payload(summary: Summary, c: Choices): Record<string, unknown> {
     use: uses()[c.use] ?? uses().decorative,
     priority: priorities()[c.priority] ?? priorities().balanced,
     notes: notes || null,
-    plates: summary.plates,
-    objects: [...new Set(summary.objects)].slice(0, 30),
+    plates: summary.layout.length
+      ? summary.layout.slice(0, 20).map((p) => compact({ plate: p.plate, name: p.name, objects: p.objects.slice(0, 30) }))
+      : summary.plates,
+    objects: summary.layout.length ? null : [...new Set(summary.objects)].slice(0, 30),
     per_object_overrides: summary.overrides,
     settings,
   });

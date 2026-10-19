@@ -53,6 +53,36 @@ describe('load', () => {
     expect(keys).toContain('textured_plate_temp');
   });
 
+  it('groups objects by plate, and sends that grouping in the prompt', async () => {
+    const model = `<config>
+      <object id="2"><metadata key="name" value="Placa"/><part id="1" subtype="normal_part"/></object>
+      <object id="4"><metadata key="name" value="Pista"/><part id="1" subtype="normal_part"/></object>
+      <object id="6"><metadata key="name" value="Solto"/><part id="1" subtype="normal_part"/></object>
+      <plate><metadata key="plater_id" value="1"/><metadata key="plater_name" value="Nome"/>
+        <model_instance><metadata key="object_id" value="2"/></model_instance>
+        <model_instance><metadata key="object_id" value="2"/></model_instance>
+      </plate>
+      <plate><metadata key="plater_id" value="2"/><metadata key="plater_name" value=""/>
+        <model_instance><metadata key="object_id" value="4"/></model_instance>
+      </plate>
+      <plate><metadata key="plater_id" value="3"/></plate>
+    </config>`;
+    const { summary } = await load(await project({ model }));
+    expect(summary.layout).toEqual([
+      { plate: 1, name: 'Nome', objects: ['Placa'] },
+      { plate: 2, name: null, objects: ['Pista'] },
+    ]);
+    const sent = payload(summary, choices);
+    expect(sent.plates).toEqual([{ plate: 1, name: 'Nome', objects: ['Placa'] }, { plate: 2, objects: ['Pista'] }]);
+    expect(sent).not.toHaveProperty('objects');
+  });
+
+  it('falls back to a plain object list without a plate layout', async () => {
+    const { summary } = await load(await project());
+    expect(summary.layout).toEqual([]);
+    expect(payload(summary, choices)).toMatchObject({ plates: 1, objects: ['Carro'] });
+  });
+
   it('leaves out keys whose per-variant items differ', async () => {
     const { summary } = await load(await project());
     expect(summary.settings.map((s) => s.key)).not.toContain('outer_wall_speed');
